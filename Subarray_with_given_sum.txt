@@ -1,0 +1,39 @@
+Given an unsorted array A of size N that contains only non-negative integers, find a continuous sub-array which adds to a given number S.
+
+Task:
+You don't need to read input or print anything. The task is to complete the function subarraySum() which takes arr, N and S as input parameters and 
+returns a list containing the starting and ending positions of the first such occurring subarray from the left where sum equals to S. 
+The two indexes in the list should be according to 1-based indexing. If no such subarray is found, return -1.
+
+
+
+// Function to find the subarray with given sum k
+// arr: input array
+// n: size of array
+vector<int> subarraySum(int arr[], int n, int s){
+    vector<int> result;
+    result.clear();
+    
+    int low=-1,high=-1,sum=0;
+    while(low<n || high<n){
+        if(sum<s){
+            high++;
+            sum+=arr[high];
+        }
+        else if(sum==s){
+            result.push_back(low+2);
+            result.push_back(high+1);
+            break;
+        }
+        else{
+            while(sum>s){
+                low++;
+                sum-=arr[low];
+            }
+        }
+    }
+    if(result.empty())
+        result.push_back(-1);
+        
+    return result;
+}
