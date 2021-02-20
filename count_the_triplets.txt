@@ -1,0 +1,23 @@
+Given an array of distinct integers. The task is to count all the triplets such that sum of two elements equals the third element.
+
+class Solution{
+public:	
+	
+	int countTriplet(int arr[], int n)
+	{
+	    sort(arr,arr+n);
+	    int count=0;
+	    for(int i=n-1;i>=2;i--){
+	        for(int j=0,k=i-1;k>j; ){
+	            if(arr[i]==arr[j]+arr[k]){
+	                count++;j++;k--;
+	            } 
+	            else if(arr[i]>arr[j]+arr[k])
+	                j++;
+	           else
+	                k--;
+	        }
+	    }
+	    return count;
+	}
+};
