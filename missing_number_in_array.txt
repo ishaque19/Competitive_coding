@@ -1,0 +1,12 @@
+Given an array of size N-1 such that it can only contain distinct integers in the range of 1 to N. Find the missing element.
+
+
+int MissingNumber(vector<int>& array, int n) {
+    // Your code goes here
+    int actual_sum=0;
+    for(auto it: array){
+        actual_sum+=it;
+    }
+    int real_sum=((n*(n+1))/2);
+    return real_sum-actual_sum;
+}
