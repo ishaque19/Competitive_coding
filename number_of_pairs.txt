@@ -1,0 +1,45 @@
+Given two arrays X and Y of positive integers, find the number of pairs such that xy > yx (raised to power of) where x is an element from X and y is an element from Y.
+
+Expected Time Complexity: O((N + M)log(N)).
+Expected Auxiliary Space: O(1).
+
+Your Task:
+This is a function problem. You only need to complete the function countPairs() that takes X, Y, M, N as parameters and returns the total number of pairs.
+
+#include <algorithm> 
+
+// Function to count number of pairs such that x^y is greater than y^x
+// X[], Y[]: input arrau
+// m, n: size of arrays X[] and Y[] respectively
+long long countPairs(int X[], int Y[], int m, int n)
+{
+   sort(X,X+m);
+   sort(Y,Y+n);
+   long long count=0;
+   int no_of_ones_in_y=upper_bound(Y,Y+n,1)-lower_bound(Y,Y+n,1);
+   int no_of_ones_in_x=upper_bound(X,X+m,1)-lower_bound(X,X+m,1);
+   int no_of_twos_in_y=upper_bound(Y,Y+n,2)-lower_bound(Y,Y+n,2);
+   count+=(((m-no_of_ones_in_x)*no_of_ones_in_y)); //1 case
+   
+   for(int j=0; j<m; j++){
+           if(X[j]==2){
+               auto it=upper_bound(Y,Y+n,4);
+               auto no_of_elements_in_between=(Y+n)-it;
+               count+=no_of_elements_in_between;
+           }
+           else if(X[j]==3){
+               auto it2=upper_bound(Y,Y+n,3);
+               auto no_of_elements_in_between2=(Y+n)-it2;
+               count+=no_of_elements_in_between2;
+               count+=no_of_twos_in_y;
+           }
+           else{
+               if(X[j]!=1){
+                auto it3=upper_bound(Y,Y+n,X[j]);
+                auto no_of_elements_in_between3=(Y+n)-it3;
+                count+=no_of_elements_in_between3;
+               }
+           }    
+    }
+   return count;
+}
