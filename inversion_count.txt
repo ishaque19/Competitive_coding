@@ -1,0 +1,70 @@
+Given an array of integers. Find the Inversion Count in the array. 
+
+Inversion Count: For an array, inversion count indicates how far (or close) the array is from being sorted. 
+If array is already sorted then the inversion count is 0. If an array is sorted in the reverse order then the inversion count is the maximum. 
+Formally, two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j.
+
+
+Your Task:
+You don't need to read input or print anything. 
+Your task is to complete the function inversionCount() which takes the array arr[] and the size of the array as inputs and returns the inversion count of the given array.
+
+Expected Time Complexity: O(NLogN).
+Expected Auxiliary Space: O(N).
+
+// Function to find inversion count in the array
+
+// arr[]: Input Array
+// N : Size of the Array arr[]
+long long int inv_count=0;
+long long *arr_copy;
+void merge(long long arr[], long long start, long long mid, long long end){
+    long long temp=mid+1;
+    long long k=start;
+    long long hold=start;
+    while(start<=mid && temp<=end){
+        if(arr[temp] < arr[start] ){
+            arr_copy[k]=arr[temp];
+            inv_count+=((mid-start)+1);
+            k++;temp++;
+        }
+        else{
+            arr_copy[k]=arr[start];
+            k++;start++;
+        }
+    }
+    while(start<=mid){
+         arr_copy[k]=arr[start];
+         k++;start++;
+    }
+    while(temp<=end){
+        arr_copy[k]=arr[temp];
+        k++;temp++;
+    }
+    
+    //copy to original array
+   for(long long i=hold;i<=end;i++){
+       arr[i]=arr_copy[i];
+   }
+    return;
+}
+
+void mergesort(long long arr[], long long start, long long end){
+    if(start<end) {
+      long long mid= floor(((start+end)/2));
+      mergesort(arr,start,mid);
+      mergesort(arr,mid+1,end);
+      merge(arr,start,mid,end);
+    }
+    else{
+        return;
+    }
+}
+
+long long int inversionCount(long long arr[], long long N)
+{
+    // Your Code Here
+    arr_copy=new long long[N];
+    mergesort(arr,0,N-1);
+    return inv_count;
+}
