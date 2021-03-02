@@ -1,0 +1,36 @@
+ Given an array A of n positive numbers. The task is to find the first Equilibium Point in the array. 
+Equilibrium Point in an array is a position such that the sum of elements before it is equal to the sum of elements after it.
+
+Your Task:
+The task is to complete the function equilibriumPoint() which takes the array and n as input parameters and returns the point of equilibrium. Return -1 if no such point exists.
+
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+ 
+ // Function to find equilibrium point in the array.
+    // a: input array
+    // n: size of array
+    int equilibriumPoint(long long a[], int n) {
+        if(n==1){
+            return 1;
+        }
+        long long left_sum=0,right_sum=0;
+        for(int i=0;i<n;i++){
+            left_sum+=a[i];
+        }//total sum
+        for(int i=n-1;i>=0;i--){
+            if(i==n-1){
+                left_sum-=a[i];
+                if(left_sum==right_sum)
+                    return i+1;
+            }
+            else{
+                left_sum-=a[i];
+                right_sum+=a[i+1];
+                 if(left_sum==right_sum)
+                    return i+1;
+            }
+        }
+        
+        return -1;
+    }

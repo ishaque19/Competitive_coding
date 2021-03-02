@@ -1,0 +1,33 @@
+Given an array A[] consisting 0s, 1s and 2s. 
+The task is to write a function that sorts the given array. 
+The functions should put all 0s first, then all 1s and all 2s in last.
+
+time complexity:O(n) spaace complexity:O(1)
+
+void sort012(int a[],int N) {
+	int low = 0; 
+    int high = arr_size - 1; 
+    int mid = 0; 
+  
+    // Iterate till all the elements 
+    // are sorted 
+    while (mid <= high) { 
+        switch (a[mid]) { 
+  
+        // If the element is 0 
+        case 0: 
+            swap(a[low++], a[mid++]); 
+            break; 
+  
+        // If the element is 1 . 
+        case 1: 
+            mid++; 
+            break; 
+  
+        // If the element is 2 
+        case 2: 
+            swap(a[mid], a[high--]); 
+            break; 
+        } 
+    } 
+}	
