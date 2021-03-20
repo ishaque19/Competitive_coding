@@ -1,0 +1,80 @@
+Given an array arr[] of N non-negative integers representing the height of blocks. 
+If width of each block is 1, compute how much water can be trapped between the blocks during the rainy season.
+
+Your Task:
+You don'y need to read input or print anything.
+ The task is to complete the function trappingWater() which takes arr and N as input parameters and returns the total amount of water that can be trapped.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+class Solution{
+
+    // Function to find the trapped water between the blocks.
+    public:
+    int get_min(int a,int b){
+        if(a<b)
+            return a;
+        else
+            return b;
+    }
+    int trappingWater(int arr[], int n){
+        int *left=new int[n];
+        int *right=new int[n];
+        int max,sum=0,amount_to_add;
+        
+        for(int i=1;i<=n-2;i++){
+            if(i==1){
+                if(arr[0]!=0){
+                    max=arr[0];
+                    left[i]=max;
+                }
+                else{
+                    max=arr[1];left[i]=max;
+                }
+            }
+            else{
+                if(arr[i-1]>max){
+                    max=arr[i-1];
+                    left[i]=arr[i-1];
+                }
+                else{
+                    left[i]=max;
+                }
+            }
+        }
+        
+        for(int i=n-2;i>=1;i--){
+            if(i==n-2){
+                if(arr[n-1]!=0){
+                    max=arr[n-1];
+                    right[i]=arr[n-1];
+                }
+                else{
+                    max=arr[i];
+                    right[i]=arr[i];
+                }
+            }
+            else{
+                if(arr[i+1]>max){
+                    max=arr[i+1];
+                    right[i]=arr[i+1];
+                }
+                else{
+                    right[i]=max;
+                }
+            }
+        }
+        sum=0;
+        for(int i=1;i<=n-2;i++){
+            amount_to_add=get_min(left[i],right[i]);
+            //cout<<left[i]<<" "<<right[i]<<" "<<amount_to_add<<" "<<arr[i]<<endl;
+            if(arr[i]<amount_to_add)
+                sum+=(amount_to_add-arr[i]);
+            
+        }
+        
+        return sum;
+    }
+};
