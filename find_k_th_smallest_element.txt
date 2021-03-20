@@ -1,0 +1,54 @@
+Given an array arr[] and a number K where K is smaller than size of array, the task is to find the Kth smallest element in the given array. 
+It is given that all array elements are distinct.
+
+Your Task:
+You don't have to read input or print anything. Your task is to complete the function kthSmallest() which takes the array, it's size and an integer k as input and returns the kth smallest element.
+ 
+ 
+EXPECTED TIME COMPLEXITY: O(N)
+Expected Auxiliary Space: O(1)
+
+
+//heapify takes O(n) after each heapify call extract_min, and the heapify process should take place for k times.
+void swap(int &a,int &b){
+    int temp=a;
+    a=b;
+    b=temp;
+}
+void adjust(int arr[],int i,int n){
+    if( ((2*i)+1)<n && arr[i]>arr[((2*i)+1)] ){
+            swap(arr[i],arr[((2*i)+1)]);
+            adjust(arr,(2*i)+1,n);
+    }
+    if( ((2*i)+2)<n && arr[i]>arr[((2*i)+2)]  ){
+            swap(arr[i],arr[((2*i)+2)]);
+             adjust(arr,(2*i)+2,n);
+    }   
+}
+void heapify(int arr[],int n){
+    for(int i=n-1;i>=0;i--){
+        if( ((2*i)+1)<n && arr[i]>arr[((2*i)+1)] ){
+            swap(arr[i],arr[((2*i)+1)]);
+            adjust(arr,(2*i)+1,n);
+        }
+        if( ((2*i)+2)<n && arr[i]>arr[((2*i)+2)]  ){
+            swap(arr[i],arr[((2*i)+2)]);
+            adjust(arr,(2*i)+2,n);
+        }
+        
+    } 
+}
+int extract_min(int arr[],int n,int k){
+   for(int i=1;i<=k;i++){
+        heapify(arr,n);
+       // cout<<i<<":"<<arr[0]<<endl;
+        if(i==k){
+            return arr[0];
+        }
+        swap(arr[0],arr[n-1]);
+        n--;
+   }
+}
+int kthSmallest(int arr[], int l, int r, int k) {
+        cout<<"ans:"<<extract_min(arr,r+1,k)<<endl;
+}

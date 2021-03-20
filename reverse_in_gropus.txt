@@ -1,0 +1,31 @@
+Given an array arr[] of positive integers of size N. Reverse every sub-array group of size K.
+
+Your Task:
+You don't need to read input or print anything. The task is to complete the function reverseInGroups() which takes the array, N and K as input parameters and modifies the array in-place. 
+
+ 
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+#include<algorithm>
+class Solution{
+public:
+    //Function to reverse every sub-array group of size k.
+    void reverseInGroups(vector<long long>& arr, int n, int k){
+        if(k==1)
+            return;
+        else if(k>n)
+            reverse(arr.begin(),arr.begin()+n);
+        else{    
+            int i=0;
+            while(i<n){
+                if(i+k<n)    
+                    reverse(arr.begin()+i,(arr.begin()+i+k));
+                else
+                    reverse(arr.begin()+i,arr.end());
+                i+=k;    
+            }
+        }
+    }
+};
