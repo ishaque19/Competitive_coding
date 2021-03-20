@@ -1,0 +1,36 @@
+The cost of stock on each day is given in an array A[] of size N. Find all the days on which you buy and sell the stock so that in between those days your profit is maximum.
+Note: There may be multiple possible solutions. Print any one of them.
+
+Your Task:
+The task is to complete the function stockBuySell() which takes an array A[] and N as input parameters and finds the days of buying and selling stock. The function must return a 2D list of integers containing all the buy-sell pairs. If there is No Profit, return an empty list.
+
+
+Expected Time Complexity : O(N)
+Expected Auxiliary Space: O(N)
+
+
+class Solution{
+public:
+    vector<vector<int> > list;
+    vector<int> x;
+    vector<vector<int> > stockBuySell(vector<int> A, int n){
+         int i=0;
+         if(n==1)
+            return list;
+         while(i<n){
+             int buy_index=i;
+             while(buy_index+1<n && A[buy_index+1]<=A[buy_index]){buy_index++;}
+             if(buy_index>=n)
+                break;
+             int sell_index=buy_index+1;
+             while(sell_index+1<n && A[sell_index+1]>=A[sell_index]){sell_index++;}
+             if(sell_index>=n)
+                break;
+             x.push_back(buy_index);x.push_back(sell_index);
+             list.push_back(x);      
+             x.clear();
+             i=sell_index+1;
+         }
+         return list;
+    }
+};
