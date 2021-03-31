@@ -1,0 +1,30 @@
+Given a list of non negative integers, 
+arrange them in such a manner that they form the largest number possible.
+The result is going to be very large, hence return the result in the form of a string.
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function printLargest() which takes the array of strings arr[] as parameter and returns a string denoting the answer.
+
+Expected Time Complexity: O(NlogN)
+Expected Auxiliary Space: O(1)
+
+static bool func(string a,string b){
+	   string x="";x+=a;x+=b;
+	   string y="";y+=b;y+=a;
+        
+	   if(y.compare(x)>0)
+	    return false;
+	  else
+	    return true;
+	    
+	   
+	}    
+	
+	string printLargest(vector<string> &arr) {
+	    sort(arr.begin(),arr.end(),func);
+	    string res;
+	    for(auto it=arr.begin();it!=arr.end();it++){
+	        res+=*it;
+	    }
+	    return res;
+	}

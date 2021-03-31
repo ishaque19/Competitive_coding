@@ -1,0 +1,46 @@
+Given a matrix of size R*C. Traverse the matrix in spiral form.
+
+Your Task:
+You dont need to read input or print anything. Complete the function spirallyTraverse() that takes matrix, R and C as input parameters and returns a list of integers denoting the spiral traversal of matrix. 
+
+Expected Time Complexity: O(R*C)
+Expected Auxiliary Space: O(R*C)
+
+//Hereby made more efficient with O(1) space.
+    vector<int> res;
+    int passed;
+    void  helper(vector<vector<int> > matrix, int r_begin, int c_begin, int r_end, int c_end){
+        if(r_end-r_begin<=0 || c_end-c_begin<=0 ||passed<=0)
+            return;
+        else{
+            for(int i=r_begin;i<c_end;i++){
+                res.push_back(matrix[r_begin][i]);passed--;
+            } 
+            if(passed<=0)
+                return;
+            for(int i=r_begin+1;i<r_end;i++){
+                res.push_back(matrix[i][c_end-1]);passed--;
+            }
+            if(passed<=0)
+                return;
+            for(int i=c_end-2;i>=c_begin;i--){
+                res.push_back(matrix[r_end-1][i]);passed--;
+            }
+            if(passed<=0)
+                return;
+            for(int i=r_end-2;i>=r_begin+1;i--){
+                res.push_back(matrix[i][c_begin]);passed--;
+            }
+            if(passed<=0)
+                return;
+            helper(matrix,r_begin+1,c_begin+1,r_end-1,c_end-1);
+        }    
+    }
+    vector<int> spirallyTraverse(vector<vector<int> > matrix, int r, int c) 
+    {
+        passed=r*c;
+        helper(matrix,0,0,r,c);
+        return res;
+    }
+
+
