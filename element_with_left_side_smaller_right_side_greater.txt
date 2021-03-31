@@ -1,0 +1,40 @@
+Given an unsorted array of size N. 
+Find the first element in array such that all of its left elements are smaller and all right elements to it are greater than it.
+
+Note: Left and right side elements can be equal to required element. And extreme elements cannot be required element.
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function findElement() which takes the array A[] and its size N as inputs and returns the required element. If no such element present in array then return -1.
+
+ 
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+
+int findElement(int arr[], int n) {
+    int left[n],right[n];
+    int temp;
+    temp=arr[0];//left to right
+    for(int i=1;i<n-1;i++){
+        left[i]=temp;
+        if(arr[i]>temp)
+            temp=arr[i];
+    }
+    temp=arr[n-1]; //right to left
+    for(int i=n-2;i>=1;i--){
+        right[i]=temp;
+        if(arr[i]<temp){
+            temp=arr[i];
+        }
+    }
+    temp=-1;
+    for(int i=1;i<=n-2;i++){
+        if(arr[i]>=left[i] && arr[i]<=right[i]){
+            temp=arr[i];break;
+        }
+    }
+    if(temp==-1)
+        return -1;
+    return temp;
+}
