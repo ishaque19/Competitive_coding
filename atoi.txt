@@ -1,0 +1,39 @@
+Your task  is to implement the function atoi. The function takes a string(str) as argument and converts it to an integer and returns it.
+
+Note: You are not allowed to use inbuilt function.
+
+int atoi(string str)
+    {
+        int size=str.size();
+        int res=0;
+        int flag=0;
+        int multiply_factor=1;
+        for(int i=0;i<size-1;i++){
+            if(i==0 && str[i]=='-'){
+                flag=1;
+            }
+            else{
+            multiply_factor*=10;
+            }
+        }
+        //cout<<multiply_factor<<endl;
+        for(int i=0;i<str.size();i++){
+            int value=(int)str[i];
+            //cout<<value<<endl;
+            if(value>=48 && value<=57){
+                //proceed
+                res+=(value-48)*multiply_factor;
+                multiply_factor/=10;
+            }
+            else{
+                if(value==45)
+                    flag=1;
+                else    
+                    return -1;
+            }
+        }
+        if(flag)
+            return res*(-1);
+        else
+            return res;
+    }

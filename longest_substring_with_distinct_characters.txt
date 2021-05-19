@@ -1,0 +1,34 @@
+Given a string S, find length of the longest substring with all distinct characters. 
+
+int NO_OF_CHARS=255;
+int longestSubstrDitinctChars (string S)
+{
+    // your code 
+    int n = S.size();
+ 
+    int res = 0; // result
+ 
+    // last index of all characters is initialized
+    // as -1
+    vector<int> lastIndex(NO_OF_CHARS, -1);
+ 
+    // Initialize start of current window
+    int i = 0;
+ 
+    // Move end of current window
+    for (int j = 0; j < n; j++) {
+ 
+        // Find the last index of str[j]
+        // Update i (starting index of current window)
+        // as maximum of current value of i and last
+        // index plus 1
+        i = max(i, lastIndex[S[j]] + 1);
+ 
+        // Update result if we get a larger window
+        res = max(res, j - i + 1);
+ 
+        // Update last index of j.
+        lastIndex[S[j]] = j;
+    }
+    return res;
+}

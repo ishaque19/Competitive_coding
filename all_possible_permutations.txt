@@ -1,0 +1,50 @@
+Given a string S. The task is to print all permutations of a given string.Your Task:  
+You don't need to read input or print anything. 
+Your task is to complete the function find_permutaion() which takes the string S as input parameter and returns a vector of string in lexicographical order.
+
+ 
+
+Expected Time Complexity: O(n! * n)
+
+Expected Space Complexity: O(n)
+class Solution{
+public:
+	    bool backtracks[6]={false};
+	    string p;
+	    string temp;
+		vector<string> x;
+		void backtrack(int count){
+		    if(p.size()==count){
+		        x.push_back(temp);
+		    }
+		    else{
+		        
+		        for(int i=0;i<p.size();i++){
+		            if(backtracks[i]==false){
+		                string past=temp;
+		                temp+=p[i];
+		                backtracks[i]=true;
+		                backtrack(count+1);
+		                backtracks[i]=false;
+		                temp=past;
+		            }
+		        }
+		    }
+		}
+		vector<string>find_permutation(string S)
+		{
+		    p=S;
+		    sort(p.begin(),p.end());
+		    for(int i=0;i<p.size();i++){
+		        string past=temp;
+		        temp+=p[i];
+		        backtracks[i]=true;
+		        backtrack(1);
+		        backtracks[i]=false;
+		        temp=past;
+		    }
+		    return x;
+		}
+};
+
+//Simply can also try with next_permutation(str.begin(),str.end())

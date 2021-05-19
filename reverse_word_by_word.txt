@@ -1,0 +1,28 @@
+Given a String S, reverse the string without reversing its individual words. Words are separated by dots.
+
+Your Task:
+You dont need to read input or print anything. Complete the function reverseWords() which takes string S as input parameter and returns a string containing the words in reversed order. Each word in the returning string should also be separated by '.' 
+
+
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(|S|)
+
+#include<string>
+#include<algorithm>
+string reverseWords(string S) 
+{ 
+   int prev_dot=S.size(),flag=1;
+   string res;
+  // cout<<S[0]<<endl;
+   for(int i=S.size()-1;i>=0;i--){
+    if(S[i]=='.'){
+        res+=S.substr(i+1,prev_dot-i);
+        prev_dot=i;
+        if(flag){
+            res+='.';flag=0;
+        }
+    }
+   }
+  res+=S.substr(0,prev_dot);
+  return res;
+} 

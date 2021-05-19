@@ -1,0 +1,39 @@
+Given two strings a and b. The task is to find if the string 'b' can be obtained by rotating another string 'a' by exactly 2 places.
+
+Your Task:
+The task is to complete the function isRotated() which takes two strings as input parameters and checks if given strings can be formed by rotations. The function returns true if string 1 can be obtained by rotating string 2 by two places, else it returns false.
+
+Expected Time Complexity: O(N).
+Expected Auxilary Complexity: O(N).
+Challenge: Try doing it in O(1) space complexity.
+
+Constraints:
+1 <= length of a, b < 100
+
+bool isRotated(string str1, string str2)
+    {
+        
+        if(str1.size()==0)
+            return true;
+        if(str1.size()==1 && str1==str2)
+            return true;
+        if(str1.size()==1 && str1!=str2)
+            return false;
+        
+            
+        string temp=str1;
+        string temp1=str1.substr(0,2);
+        string temp2=str1.substr(str1.size()-2,2);
+        temp.erase(0,2);
+        temp.append(temp1);
+        //cout<<temp<<endl;
+        if(temp==str2)
+            return true;
+        temp=str1;
+        temp.erase(str1.size()-2,2);
+        temp2.append(temp);
+       // cout<<temp2<<endl;
+        if(temp2==str2)
+            return true;
+        return false;
+    }
