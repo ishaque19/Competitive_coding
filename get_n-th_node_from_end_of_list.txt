@@ -1,0 +1,22 @@
+Given a linked list consisting of L nodes and given a number N. 
+The task is to find the Nth node from the end of the linked list.
+
+int getNthFromLast(struct Node *head, int n)
+{
+    struct Node *temp=head;
+    int flag=0;
+    for(int i=1;i<n;i++){
+        if(!temp->next){
+            flag=1;break;
+        }
+            
+        temp=temp->next;
+    }
+    if(flag)
+        return -1;
+    while(temp->next){
+        temp=temp->next;head=head->next;
+    }    
+    
+    return head->data;
+}

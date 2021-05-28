@@ -1,0 +1,20 @@
+Given two sorted linked lists consisting of N and M nodes respectively. The task is to merge both of the list (in-place) and return head of the merged list.
+
+struct Node* SortedMerge(struct Node* a, struct Node* b)
+{
+    if(a==NULL){
+        return b;
+    }
+    if(b==NULL){
+        return a;
+    }
+    
+    if(a->data<=b->data){
+        a->next=SortedMerge(a->next,b);
+    }
+    else{
+        b->next=SortedMerge(a,b->next);   
+    }
+    
+    return (a->data<=b->data)?a:b;
+}

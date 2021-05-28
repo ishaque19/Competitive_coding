@@ -1,0 +1,87 @@
+Given the head of a singly linked list, return true if it is a palindrome.
+
+class Solution {
+public:
+    struct ListNode* reverseList(struct ListNode *head)
+    {
+        if(!head->next)
+            return head;
+        if(head->next && !head->next->next){
+            head->next->next=head;
+            ListNode *start=head->next;
+            head->next=NULL;
+            return start;
+        }
+            
+       ListNode *prev,*curr,*future;
+       prev=head;
+       curr=head->next;
+       future=head->next->next;
+       
+       while(future->next){
+           curr->next=prev;
+           prev=curr;
+           curr=future;
+           future=future->next;
+       }
+       curr->next=prev;
+       future->next=curr;
+       
+       head->next=NULL;
+       head=future;
+       
+       return head;
+    }
+
+    bool isPalindrome(ListNode* head) {
+        if(!head){ //zero length
+            return true;
+        }
+        else if(head && !head->next){ //one length
+            return true;
+        }
+        else{//other cases
+            ListNode *slow=head;
+            ListNode *fast=head;
+            int n=1;
+            
+            while(fast->next && fast->next->next){
+                slow=slow->next;
+                fast=fast->next->next;
+                n+=2;
+            }
+            
+            if(fast->next){ //even case
+                n+=1;
+                fast=fast->next;
+            }
+            
+            //cout<<slow->val<<" "<<fast->val;
+            //by here whatever case slow at mid and fast at end.
+            
+            
+           slow->next=reverseList(slow->next);
+           ListNode *temp1=head;
+           ListNode *temp2=slow->next;
+            
+           //cout<<temp1->val<<" "<<temp2->val<<endl; 
+           while(true){
+             
+                    if(temp1 && temp2 && temp1->val==temp2->val){
+                        temp1=temp1->next;
+                        temp2=temp2->next;
+                    }
+                    else if(temp2==NULL){
+                       //slow->next=reverseList(slow->next);
+                       return true;
+                    }
+                    else {
+                        //slow->next=reverseList(slow->next);
+                        return false;
+                    }
+                   
+        
+           }
+        }
+    }
+};

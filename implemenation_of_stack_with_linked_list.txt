@@ -1,0 +1,28 @@
+Implement Push and Pop Operation of Stack With respect to Linked List.
+
+void MyStack ::push(int x) 
+{
+    // Your Code
+    StackNode *q=new StackNode(x);
+    if(!top){
+        top=q;
+    }
+    else{
+        q->next=top;
+        top=q;
+    }
+}
+
+//Function to remove an item from top of the stack.
+int MyStack ::pop() 
+{
+    // Your Code
+    if(!top){ //empty stack
+        return -1;
+    }
+    else{
+       int x=top->data; 
+       top=top->next;
+       return x;
+    }
+}

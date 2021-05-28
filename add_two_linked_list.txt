@@ -1,0 +1,93 @@
+ Given two numbers represented by two linked lists of size N and M. 
+ The task is to return a sum list. The sum list is a linked list representation of the addition of two input numbers from the last.
+ 
+ (normal addition)
+ 
+ only diff is if two numbers are of not equal in length, append 0's to the end of smaller number to make it equal length to largest numbers in length.
+ 
+ 
+ public:
+    //Function to add two numbers represented by linked list.
+    int flag=0;
+    int add(struct Node* first, struct Node* second){
+        int carry,res;
+        if(!first && !second){
+            res=0;
+        }
+        else if(!first){
+            carry=add(NULL,second->next);
+            res=second->data+carry;
+            if(!flag){
+                flag=2;
+            }
+            if(flag==1){
+                first->data=res%10;
+            }
+            else{
+                second->data=res%10;
+            }
+        }
+        else if(!second){
+            carry=add(first->next,NULL);
+            res=first->data+carry;
+            if(!flag){
+                flag=1;
+            }
+            if(flag==1){
+                first->data=res%10;
+            }
+            else{
+                second->data=res%10;
+            }
+        }
+        else{
+            carry=add(first->next,second->next);
+            res=carry+first->data+second->data;
+            if(!flag){
+                flag=1;
+            }
+            
+            if(flag==1)
+                first->data=res%10;
+            else
+                second->data=res%10;
+        }
+        
+        
+         return res>9?res/10:0;
+         
+    }
+    struct Node* addTwoLists(struct Node* first, struct Node* second)
+    {
+        if(!first && !second){
+            return first;
+        }
+        else if(!first){
+            return second;
+        }
+        else if(!second){
+            return first;
+        }
+        else{
+            int x=add(first,second);  
+            if(x>0){
+                if(flag==1){
+                second->data=x;
+                second->next=first;
+                return second;
+                }
+                else{
+                    first->data=x;
+                    first->next=second;
+                    return first;
+                }
+            }    
+            else{
+                if(flag==1)
+                    return first;
+                else
+                    return second;
+            }  
+        }
+    }
+};

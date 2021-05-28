@@ -1,0 +1,38 @@
+Given a linked list of N nodes. The task is to reverse this list.
+
+Your Task:
+The task is to complete the function reverseList() with head reference as the only argument and should return new head after reversing the list.
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(1).
+
+struct Node* reverseList(struct Node *head)
+    {
+        if(!head->next)
+            return head;
+        if(head->next && !head->next->next){
+            head->next->next=head;
+            struct node *start=head->next;
+            head->next=NULL;
+            return start;
+        }
+            
+       struct Node *prev,*curr,*future;
+       prev=head;
+       curr=head->next;
+       future=head->next->next;
+       
+       while(future->next){
+           curr->next=prev;
+           prev=curr;
+           curr=future;
+           future=future->next;
+       }
+       curr->next=prev;
+       future->next=curr;
+       
+       head->next=NULL;
+       head=future;
+       
+       return head;
+    }

@@ -1,0 +1,47 @@
+ Remove loop in the linked list,if exists.
+ 
+ void removeLoop(Node* head)
+    {
+        int x=0;
+        struct Node *slow_p = head, *fast_p = head;
+
+        while (fast_p->next && fast_p->next->next) {
+        slow_p = slow_p->next;
+        fast_p = fast_p->next->next;
+
+        if (slow_p == fast_p) {
+            x=1;
+            loop_node=slow_p;
+            break;
+        }
+        }
+        //cout<<x<<endl;
+        
+        if(x==0)
+            return;
+        else{
+            int k=1;
+            struct Node *temp=loop_node;
+            while(temp->next!=loop_node){
+                temp=temp->next;
+                k++;
+            }k++;
+            
+            temp=head;
+            struct Node *null_converter=head;
+           for(int i=1;i<k;i++){
+               temp=temp->next;
+               if(i!=1)
+                    null_converter=null_converter->next;
+           } 
+           
+           while(temp!=head){
+               temp=temp->next;
+               head=head->next;
+               null_converter=null_converter->next;
+           }
+            
+            null_converter->next=NULL;
+            return;
+        }    
+    }

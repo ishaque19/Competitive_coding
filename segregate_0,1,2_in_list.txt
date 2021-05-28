@@ -1,0 +1,100 @@
+Given a linked list of N nodes where nodes can contain values 0s, 1s, and 2s only. 
+The task is to segregate 0s, 1s, and 2s linked list such that all zeros segregate to head side, 2s at the end of the linked list, and 1s in the mid of 0s and 2s.
+
+ Node* segregate(Node *head) {
+        
+        // Add code here
+        Node *zero=NULL;
+        Node *one=NULL;
+        Node *two=NULL;
+        Node *zero_begin=NULL;
+        Node *one_begin=NULL;
+        Node *two_begin=NULL;
+        if(!head || !head->next)
+            return head;
+            
+        while(head){
+            if(head->data==0){
+                if(!zero){
+                    zero=head;
+                    zero_begin=zero;
+                }
+                else{
+                  zero->next=head;
+                  zero=zero->next;
+                }
+            }
+            else if(head->data==1){
+                if(!one){
+                    one=head;
+                    one_begin=one;
+                }
+                 else{
+                  one->next=head;
+                  one=one->next;
+                }
+            }
+            else{
+                if(!two){
+                    two=head;
+                    two_begin=two;
+                }
+                else{
+                  two->next=head;
+                  two=two->next;
+                }
+            }
+            head=head->next;
+        }
+        
+        if(zero_begin){
+            if(one_begin){
+                if(two_begin){
+                    //0 1 2
+                    zero->next=one_begin;
+                    one->next=two_begin;
+                    two->next=NULL;
+                    return zero_begin;
+                }
+                else{//0 1
+                    zero->next=one_begin;
+                    one->next=NULL;
+                    return zero_begin;
+                }
+            }
+            else{
+                if(two_begin){//0 2
+                   zero->next=two_begin;
+                   two->next=NULL;
+                   return zero_begin;
+                }
+                else{//0
+                    zero->next=NULL;
+                    return zero_begin;
+                }
+            }
+        }
+        else{
+            if(one_begin){
+                if(two_begin){ //1 2
+                    one->next=two_begin;
+                    two->next=NULL;
+                    return one_begin;
+                }
+                else{//1
+                    one->next=NULL;
+                    return one_begin;
+                }
+            }
+            else{
+                if(two_begin){//2
+                    two->next=NULL;
+                    return two_begin;
+                }
+                else{//empty list
+                    
+                }
+            }
+        }
+    }
+};
