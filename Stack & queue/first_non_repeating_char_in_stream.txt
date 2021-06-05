@@ -1,0 +1,58 @@
+Given an input stream of A of n characters consisting only of lower case alphabets. 
+The task is to find the first non repeating character, each time a character is inserted to the stream. 
+If there is no such character then append '#' to the answer.
+
+	    struct node{
+	        char c;
+	        int count;  
+	        struct node *next;
+	    };
+	    struct node *createnode(char a,int b){
+	        struct node *temp=new node();
+		    temp->c=a;
+		    temp->count=b;
+		    temp->next=NULL;
+	    }
+		string FirstNonRepeating(string A){
+		    // Code here
+		    string res="";
+		    struct node *head=NULL;
+		    struct node *end;
+		    unordered_map<char,struct node *> track;
+		    for(int i=0;i<A.size();i++){
+		        char non_repeat;
+		        if(!head){
+		            if(track[A[i]]==NULL){
+		            struct node *p=createnode(A[i],1);
+		            head=p;
+		            end=p;
+		            track[A[i]]=p;
+		            non_repeat=A[i];
+		            }
+		            else{
+		               non_repeat='#'; 
+		            }
+		        }
+		        else{
+		            if(track.find(A[i])!=track.end()){
+		                track[A[i]]->count+=1;
+		            }
+		            else{
+		                struct node *p=createnode(A[i],1);
+		                track[A[i]]=p;
+		                end->next=p;
+		                end=end->next;
+		            }
+		            while(head && head->count>1){
+		                head=head->next;
+		            }
+		            if(head==NULL)
+		                non_repeat='#';
+		            else 
+		                non_repeat=head->c;
+		        }
+		        res+=non_repeat;
+		    }
+		    return res;
+		}
+

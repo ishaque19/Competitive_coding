@@ -1,0 +1,66 @@
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the MinStack class:
+
+MinStack() initializes the stack object.
+void push(val) pushes the element val onto the stack.
+void pop() removes the element on the top of the stack.
+int top() gets the top element of the stack.
+int getMin() retrieves the minimum element in the stack.
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<long> st;
+    long min;
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        long value=val;
+        if(st.empty()){
+            min=value;
+            st.push(value);
+        }
+        else{
+            if(value>=min){
+                st.push(value);
+            }
+            else{//transform and put
+                long temp=2*value-min;
+                st.push(temp);
+                min=value;
+            }
+        }
+    }
+    
+    void pop() {
+        int res;
+        if(st.top()>=min){//no transformation  made
+            res=st.top();
+            st.pop();
+        }
+        else{
+            res=min;
+            min=2*min-st.top();
+            st.pop();
+        }
+    }
+    
+    int top() {
+        long res;
+        if(st.top()>=min){//no transformation  made
+            res=st.top();
+        }
+        else{
+            res=min;
+        }
+        return res;
+    }
+    
+    int getMin() {
+        return min;
+    }
+};
+

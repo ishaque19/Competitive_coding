@@ -1,0 +1,45 @@
+There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
+
+You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. 
+You begin the journey with an empty tank at one of the gas stations.
+
+Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, 
+otherwise return -1. If there exists a solution, it is guaranteed to be unique.
+
+int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        //gas-->amount of petrol
+        //cost-->distance 
+        
+        long balance=0;
+        long front=0,rear=0;//front-start point
+        int flag=0;
+        long counter=0;
+        long long end=2*gas.size();
+        while(counter<=end){
+            if(rear>=gas.size())
+                rear=0;
+            balance+=(gas[rear]-cost[rear]);
+            if(balance<0){
+                front=rear+1;
+                rear=front;
+                counter++;
+                flag=0;
+                balance=0;
+            }
+            else if(flag && front==rear){
+                //index found;
+                return front;
+            }
+            else{
+                //can continue
+                rear++;
+                counter++;
+                flag=1;
+            }
+        }
+        
+        return -1;
+    }
+};
+
+ 

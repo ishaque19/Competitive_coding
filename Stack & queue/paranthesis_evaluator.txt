@@ -1,0 +1,37 @@
+Given an expression string x. Examine whether the pairs and the orders of “{“,”}”,”(“,”)”,”[“,”]” are correct in exp.
+For example, the function should return 'true' for exp = “[()]{}{[()()]()}” and 'false' for exp = “[(])”.
+
+stack<char> evaluator;
+    bool isValid(string s) {
+        
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='('|| s[i]=='{' || s[i]=='['){
+                evaluator.push(s[i]);
+            }
+            else{
+                if(s[i]==')') {
+                    if(!evaluator.empty() && evaluator.top()=='(')
+                        evaluator.pop();
+                    else
+                        return false;
+                }
+                else if(s[i]=='}') {
+                    if(!evaluator.empty() && evaluator.top()=='{')
+                        evaluator.pop();
+                    else
+                        return false;
+                }
+                else if(s[i]==']') {
+                    if(!evaluator.empty() && evaluator.top()=='[')
+                        evaluator.pop();
+                    else
+                        return false;
+                }
+                else{}
+            }
+        }
+        if(evaluator.empty())
+            return true;
+        else
+            return false;
+    }
