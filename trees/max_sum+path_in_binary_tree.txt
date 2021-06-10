@@ -1,0 +1,48 @@
+A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them.
+ A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
+
+The path sum of a path is the sum of the node's values in the path.
+
+Given the root of a binary tree, return the maximum path sum of any path.
+
+struct ds{
+    int c1;
+    int c2;
+    int c3;
+};
+class Solution {
+public:
+    struct ds* utility_helper(TreeNode *root){
+        struct ds *box1=new ds();
+        struct ds *box2=new ds();
+        struct ds *currentbox=new ds();
+        if(!root->left && !root->right){
+            currentbox->c1=root->val;
+            currentbox->c2=root->val;
+            currentbox->c3=root->val;
+            return currentbox;
+        }
+        if(root->left){
+            box1=utility_helper(root->left);
+        }
+        else{ //max node -ve value possible -1000, not to put 0 bcoz it affects in negative node cases
+            box1->c1=-1001;box1->c2=-1001;box1->c3=-1001;
+        }
+        if(root->right){
+            box2=utility_helper(root->right);
+        }
+        else{
+            box2->c1=-1001;box2->c2=-1001;box2->c3=-1001;
+        }
+        currentbox->c1=max(max(box1->c1+root->val,box2->c1+root->val),root->val); // currentnode is one of the paths of max sum
+        currentbox->c2=box1->c1+box2->c1+root->val; //currentnode is root of max path
+        currentbox->c3=max(max(box1->c1,box2->c1),max(max(box1->c2,box2->c2),max(box1->c3,box2->c3))); //withoutcurrent node finding..
+
+        return currentbox;
+    }
+ 
+    int maxPathSum(TreeNode* root) {
+        struct ds *res=utility_helper(root);
+        return max(max(res->c1,res->c2),res->c3);
+    }
+}; 

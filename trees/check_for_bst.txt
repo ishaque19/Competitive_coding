@@ -1,0 +1,26 @@
+Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+A valid BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+ 
+
+class Solution {
+public:
+    bool validate(TreeNode *root,long max,long min){
+        if(!root){
+            return true;
+        }
+        else if(root->val>min && root->val<max){
+            return validate(root->left,root->val,min) && validate(root->right,max,root->val);
+        }
+        else{
+            return false;
+        }
+    }
+    bool isValidBST(TreeNode* root) {
+        return validate(root,LONG_MAX,LONG_MIN)  ;      
+    }
+};

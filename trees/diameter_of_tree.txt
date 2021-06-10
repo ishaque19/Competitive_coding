@@ -1,0 +1,47 @@
+Given the root of a binary tree, return the length of the diameter of the tree.
+
+The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
+
+The length of a path between two nodes is represented by the number of edges between them.
+struct mynode{
+    int box1;
+    int box2;
+};
+class Solution {
+public:
+    mynode *helper(TreeNode *root){
+        if(!root->left && !root->right){
+            mynode *x=new mynode();
+            x->box1=1;x->box2=1;
+            //cout<<x->box1<<" "<<x->box2<<endl;
+            return x;
+        }
+        else{
+            mynode *x=new mynode();
+            mynode *y=new mynode();
+                if(root->left){
+                    y=helper(root->left);
+                }
+                else{
+                    y->box1=0;y->box2=0;
+                }
+            mynode *z=new mynode();
+                if(root->right){
+                    z=helper(root->right);
+                }
+                else{
+                    z->box1=0;z->box2=0;
+                }
+            x->box1=max(y->box1,z->box1)+1; //cases of height
+            x->box2=max(max(y->box2,z->box2),(y->box1+z->box1+1));
+            //cout<<x->box1<<" "<<x->box2<<endl;
+            return x;
+            
+        }
+    }
+    int diameterOfBinaryTree(TreeNode* root) {
+        mynode *x=new mynode();
+        x=helper(root);  
+        return max(x->box1,x->box2)-1;
+    }
+};

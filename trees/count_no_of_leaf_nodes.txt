@@ -1,0 +1,11 @@
+Given a Binary Tree of size N , You have to count leaves in it.
+
+int countLeaves(Node* root)
+{
+   if(!root)
+   return 0;
+   else if(!root->left && !root->right)
+    return 1;
+   else
+    return countLeaves(root->left)+countLeaves(root->right);
+}

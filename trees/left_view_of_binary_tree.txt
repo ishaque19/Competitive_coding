@@ -1,0 +1,29 @@
+Given a Binary Tree, print Left view of it. Left view of a Binary Tree is set of nodes visible when tree is visited from Left side. 
+The task is to complete the function leftView(), which accepts root of the tree as argument.
+void update(Node *root,int level,bool *visited){
+    if(!root){
+        return;
+    }
+    else if(root && visited[level]==false){
+        cout<<root->data<<" ";
+        visited[level]=true;
+        if(root->left)
+            update(root->left,level+1,visited);
+        if(root->right)
+            update(root->right,level+1,visited);
+        if(!root->left && !root->right){
+            return;
+        }
+    }
+    else{
+        return;
+    }
+}
+vector<int> leftView(Node *root)
+{
+    bool visited[101]={false};
+    update(root,0,visited); 
+    vector<int> s;
+
+    return s;
+}

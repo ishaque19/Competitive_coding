@@ -1,0 +1,46 @@
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, 
+then right to left for the next level and alternate between).
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root)
+            return res;
+        stack<TreeNode *>s1;
+        stack<TreeNode *>s2;
+        
+        s1.push(root);
+        vector<int> temp; 
+        while( !s1.empty() || !s2.empty()){
+            while(!s1.empty()){
+                temp.push_back(s1.top()->val);
+                if(s1.top()->left){
+                    s2.push(s1.top()->left);
+                }
+                if(s1.top()->right){
+                    s2.push(s1.top()->right);
+                }
+                s1.pop();
+            }
+            if(!temp.empty())
+                res.push_back(temp);
+            temp.clear();
+            while(!s2.empty()){
+                temp.push_back(s2.top()->val);
+                if(s2.top()->right){
+                    s1.push(s2.top()->right);
+                }
+                if(s2.top()->left){
+                    s1.push(s2.top()->left);
+                }
+                s2.pop();
+            }
+            if(!temp.empty())
+             res.push_back(temp);
+            temp.clear();
+        }
+    return res;
+    }
+    
+};

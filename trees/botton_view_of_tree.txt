@@ -1,0 +1,58 @@
+Given a binary tree, print the bottom view from left to right.
+A node is included in bottom view if it can be seen when we look at the tree from bottom.
+
+
+struct node{
+    int data;
+    int level;
+    struct Node *travel;
+};
+vector <int> bottomView(Node *root)
+{
+   // Your Code Here
+   map<int,int> res;
+   queue<node *> q;
+   vector<int> v;
+   if(!root){
+       return v;
+   }
+   struct node *start=new node();
+   start->data=root->data;
+   start->level=0;
+   start->travel=root;
+   q.push(start);
+   
+   while(!q.empty()){
+       if(q.front()){
+           res[q.front()->level]=q.front()->data;
+       }
+       if(q.front()->travel->left){
+            struct node *start=new node();
+            start->data=q.front()->travel->left->data;
+            start->level=(q.front()->level)-1;
+            start->travel=q.front()->travel->left; 
+            q.push(start);
+       }
+       if(q.front()->travel->right){
+            struct node *start=new node();
+            start->data=q.front()->travel->right->data;
+            start->level=(q.front()->level)+1;
+            start->travel=q.front()->travel->right; 
+            q.push(start);
+       }
+       
+       q.pop();
+    }
+   
+   for(auto x:res){
+       v.push_back(x.second);
+   }
+   
+   return v;
+   
+    //res.push_back(1);res.push_back(2);
+    //q.push(root);
+    //traverse(root,0,res,q);    
+   // return res;    
+}
+
