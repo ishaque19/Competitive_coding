@@ -1,0 +1,42 @@
+You are given an array A of size N. The array contains integers and is of even length. The elements of the array represent N coin of values V1, V2, ....Vn. 
+You play against an opponent in an alternating way.
+
+In each turn, a player selects either the first or last coin from the row, removes it from the row permanently, and receives the value of the coin.
+
+You need to determine the maximum possible amount of money you can win if you go first.
+Note: Both the players are playing optimally.
+_--------------------------------------------------------------------------------------------_
+--------------------------------------------------------------------------------------------_
+ int *p;
+long long memoization(int i,int j,vector<vector<long long>> &dp){
+    if(dp[i][j]!=-1){
+        return dp[i][j];
+    }
+    else{
+        if(i==j){
+            dp[i][i]=p[i-1];
+            return p[i-1];
+        }
+        else if(j==i+1){
+            dp[i][j]=max(p[i-1],p[j-1]);
+            return dp[i][j];
+        }
+        else{ // no base case matched or not equals to -1
+            dp[i][j]=max(
+                p[i-1]+
+                min(memoization(i+2,j,dp),memoization(i+1,j-1,dp)),
+                p[j-1]+
+                min(memoization(i,j-2,dp),memoization(i+1,j-1,dp))
+                );
+            return dp[i][j];
+        }
+    }
+}
+long long maximumAmount(int arr[], int n) 
+{
+    p=arr;
+    vector<vector<long long>> dp(n+1,vector<long long>(n+1,-1));
+    return memoization(1,n,dp);
+    
+   
+}

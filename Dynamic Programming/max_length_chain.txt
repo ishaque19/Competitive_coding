@@ -1,0 +1,41 @@
+You are given an array of n pairs pairs where pairs[i] = [lefti, righti] and lefti < righti.
+
+A pair p2 = [c, d] follows a pair p1 = [a, b] if b < c. A chain of pairs can be formed in this fashion.
+
+Return the length longest chain which can be formed.
+
+You do not need to use up all the given intervals. You can select pairs in any order.
+
+class Solution {
+public:
+    static bool ownsort(vector<int> a,vector<int> b){ //need increasing order of 2nd element 
+        if(a[1]>b[1])
+            return false; //to swap
+        else
+            return true;
+    }
+    int findLongestChain(vector<vector<int>>& pairs) { //simple idea of lis but tom compare i.first>j.second
+        int max=1;
+        if(pairs.size()==1)
+            return max;
+        sort(pairs.begin(),pairs.end()); //no need of ownsort--showing error, the default sort itself feels awesome.
+        vector<int> maxlength(pairs.size(),1);
+        for(auto x:pairs){
+            for(auto y:x){
+                cout<<y<<" ";
+            }
+          cout<<endl;
+        }
+        for(int i=1;i<pairs.size();i++){
+            for(int j=0;j<i;j++){
+                if(pairs[i][0]>pairs[j][1] && maxlength[i]<=maxlength[j]){
+                    maxlength[i]=1+maxlength[j];
+                }
+                if(maxlength[i]>max)
+                    max=maxlength[i];
+            }
+        }
+        
+        return max;
+    }
+};

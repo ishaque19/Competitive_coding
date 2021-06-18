@@ -1,0 +1,28 @@
+Given two strings s and t. Find the minimum number of operations that need to be performed on str1 to convert it to str2. The possible operations are:
+
+1.Insert
+2.Remove
+3.Replace
+
+int editDistance(string s, string t) {
+        //additional row and column
+        int dp[t.size()+1][s.size()+1];
+        for(int i=0;i<=s.size();i++){ //removing
+            dp[0][i]=i;
+        }
+        for(int i=0;i<=t.size();i++){ //adding 
+            dp[i][0]=i;    
+        }    
+        for(int i=1;i<=t.size();i++){
+            for(int j=1;j<=s.size();j++){
+                if(t[i-1]==s[j-1]){ //important of indexing.
+                    dp[i][j]=dp[i-1][j-1]+0;
+                }
+                else{
+                    dp[i][j]=(min(min(dp[i-1][j],dp[i][j-1]),dp[i-1][j-1]))+1;
+                }
+            }
+        }
+        
+        return dp[t.size()][s.size()];
+    }

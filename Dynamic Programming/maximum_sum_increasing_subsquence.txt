@@ -1,0 +1,24 @@
+Given an array arr of N positive integers, the task is to find the maximum sum increasing subsequence of the given array.
+	int maxSumIS(int arr[], int n)  
+	{  
+	    // Your code goes here
+	    int msis[n];
+	    int max=arr[0];
+	    for(int i=0;i<n;i++){
+	        msis[i]=arr[i];
+	        if(arr[i]>max)
+	            max=arr[i];
+	    }
+	    
+	    for(int i=1;i<n;i++){
+	        for(int j=0;j<i;j++){
+	            if(arr[i]>arr[j] && msis[i]<msis[j]+arr[i]){
+	                msis[i]=msis[j]+arr[i];
+	            }//strictly increasing 
+	            if(msis[i]>max)
+	                max=msis[i];
+	        }
+	    }
+	    
+	    return max;
+	}

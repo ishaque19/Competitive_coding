@@ -1,0 +1,63 @@
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+ int coinChange(vector<int>& coins, int amount) {
+        if(amount==0)
+            return 0;
+        
+        sort(coins.begin(),coins.end());
+        if(coins.size()==1 && (amount<coins[0]))
+            return -1;
+        if(coins.size()==1 && amount%coins[0]==0)
+            return amount/coins[0];
+        
+        int dp[coins.size()][amount+1];//0 to amt
+        for(int i=0;i<coins.size();i++){ //initialization
+            for(int j=0;j<=amount;j++){
+                dp[i][j]=-1;
+            }
+        }
+        for(int i=0;i<coins.size();i++){ //min coins to form 0 is 0
+            dp[i][0]=0;
+        }
+        //-1 cant be formed
+        for(int i=1;i<=amount;i++){
+            if(i<coins[0]){
+                dp[0][i]=-1; //cant be formed
+            }
+            else if(i!=0 && i%coins[0]==0){
+                dp[0][i]=i/coins[0];
+            }
+            else{
+                dp[0][i]=dp[0][i-coins[0]];
+            }
+        }
+        
+        //cout<<dp[coins.size()-1][amount];
+        //once filled top left row and left col its now becomes easy
+        
+        for(int i=1;i<coins.size();i++){
+            for(int j=1;j<=amount;j++){
+                if(j>=coins[i]){
+                    if(dp[i][j-coins[i]]!=-1&& dp[i-1][j]!=-1)
+                        dp[i][j]=min(dp[i-1][j],1+dp[i][j-coins[i]]);
+                    else if(dp[i][j-coins[i]]==-1 && dp[i-1][j]!=-1)
+                        dp[i][j]=dp[i-1][j];
+                    else if(dp[i][j-coins[i]]!=-1 && dp[i-1][j]==-1)
+                        dp[i][j]=1+dp[i][j-coins[i]];
+                    else
+                        dp[i][j]=-1;
+                }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        
+        return dp[coins.size()-1][amount];
+        
+        
+    }

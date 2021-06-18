@@ -1,0 +1,74 @@
+Suppose you have N eggs and you want to determine from which floor in a K-floor building you can drop an egg such that it doesn't break. You have to determine the minimum number of attempts you need in order find the critical floor in the worst case while using the best strategy.There are few rules given below. 
+
+An egg that survives a fall can be used again.
+A broken egg must be discarded.
+The effect of a fall is the same for all eggs.
+If the egg doesn't break at a certain floor, it will not break at any floor below.
+If the eggs breaks at a certain floor, it will break at any floor above.
+
+int eggDrop(int k, int n) //n eggs k floors
+    
+    {
+        if(k==1)
+            return n;
+        if(n==1)
+            return 1;
+        int dp[k+1][n+1];
+        
+        for(int i=1;i<=n;i++){
+            dp[1][i]=i;
+            dp[0][i]=-1;
+        }
+        for(int i=1;i<=k;i++){
+            dp[i][1]=1;
+            dp[i][0]=-1;
+        }
+        
+        for(int i=2;i<=k;i++){
+            for(int j=2;j<=n;j++){
+                int minimum=INT_MAX,res;
+                for(int it=1;it<=j;it++){
+                    res=max(dp[i-1][it-1],dp[i][j-it]);
+                    if(res<minimum)
+                        minimum=res;
+                }
+                dp[i][j]=minimum+1;
+            }
+        }
+        
+        return dp[k][n];
+    }
+  -----------------------------------------------------------------------------------------
+
+   
+	 public int solve(int floors , int eggs){
+        int[][] strg = new int[floors+1][eggs+1];
+        for(int i=1;i<=floors;i++){
+            for(int j=1;j<=eggs;j++){
+                if(i==1&&j==1){
+                    strg[i][j]=1;
+                }
+               else if(i==1){
+                    strg[i][j]=1;
+                }
+                else if(j==1){
+                    strg[i][j]=i;
+                }
+                else{
+                    if(j<=i){
+                    strg[i][j]= strg[i-1][j-1]+strg[i-1][j]+1;
+                    }
+                    else {
+                        strg[i][j]=strg[i][j-1];
+                    }
+                     
+                }
+                if(strg[i][j]>=floors){
+                    return i;
+                }
+               
+                
+            }
+        }
+        return 0;
+    }

@@ -1,0 +1,48 @@
+Given an integer array arr of size N, the task is to divide it into two sets S1 and S2 such that the absolute difference between their sums is minimum and 
+find the minimum difference.
+
+	public:
+    int minDifference(int arr[], int n) 
+	{ 
+	    if(n==1)
+	        return arr[0];
+	    if(n==2)
+	        return abs(arr[0]-arr[1]);
+	    int sum=0;
+	    for(int i=0;i<n;i++){
+	        sum+=arr[i];
+	    }     
+	    
+	    int target=floor(sum/2);
+	    //cout<<sum<<" "<<target<<endl;
+	    bool dp[n+1][target+1];
+        for(int i=0;i<=target;i++){
+            dp[0][i]=false;
+        }
+        
+        dp[0][0]=true;
+        for(int i=1;i<=n;i++){
+            dp[i][0]=true;
+        }
+        
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=target;j++){
+                if(arr[i-1]>j){
+                    dp[i][j]=dp[i-1][j];
+                }
+                else{
+                    dp[i][j]=dp[i-1][j] || dp[i-1][j-arr[i-1]];
+                }
+          //      cout<<dp[i][j]<<" ";
+            }
+           // cout<<endl;
+        }
+        
+        for(int i=target;i>=0;i--){
+            if(dp[n][i]==true){
+               // cout<<dp[n][i]<<" "<<sum-i<<endl;
+                return abs((sum-i)-i);
+            }
+        }
+        
+	}
