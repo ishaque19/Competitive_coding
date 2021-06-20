@@ -1,0 +1,47 @@
+Given an array of size N. The task is to sort the array elements by completing functions heapify() and buildHeap() which are used to implement Heap Sort.   
+   void swap(int arr[], int i ,int j){
+        int temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+    void heapify(int arr[], int n, int x)  
+    {
+      // Your Code Here
+          int max_value=arr[x];
+          int index=x;
+          int l=2*x+1;
+          int r=l+1;
+          if(l<n){
+              if(arr[l]>max_value){
+                  max_value=arr[l];
+                  index=l;
+              }
+          }
+          if(r<n){
+              if(arr[r]>max_value){
+                  max_value=arr[r];
+                  index=r;
+              }
+          }
+          if(index!=x){
+            swap(arr,x,index);
+            heapify(arr,n,index);
+          }
+      
+    }
+
+  
+    void heapSort(int arr[], int n)
+    {
+        //code here
+        
+        for(int i=n/2 - 1 ;i>=0;i--){ //starting heapify
+            heapify(arr,n,i);
+        }
+        for(int i=n-1;i>0;i--){ //does deletion from heap again needs i=n/2-1 to 0(obviously no)
+            swap(arr,0,i);
+            heapify(arr,i,0); //just calling ad adjusting is enough no need of loop from i=n/2-1
+        }
+    }
+};
+

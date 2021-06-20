@@ -1,0 +1,38 @@
+Given an array arr[], its starting position l and its ending position r. Sort the array using merge sort algorithm.
+
+ void merge(int nums[], int start, int mid, int end)
+    {
+         // Your code here
+         vector<int> temp(end-start+1,0);
+        int i1=start,i2=mid+1,k=-1;
+        while(i1<=mid && i2<=end){
+            if(nums[i1]<=nums[i2]){
+                temp[++k]=nums[i1++];
+            }
+            else{
+                temp[++k]=nums[i2++];
+            }
+        }
+        
+        while(i1<=mid){
+                temp[++k]=nums[i1++];
+        }
+        while(i2<=end){
+                temp[++k]=nums[i2++];
+        }
+        
+        for(int i=start,j=0;i<=end && j<=k;i++,j++){
+            nums[i]=temp[j];
+        }
+    }
+    void mergeSort(int arr[], int start, int end)
+    {
+        //code here
+        if(start>=end){
+            return;    
+        }
+        int mid=floor((start+end)/2);
+        mergeSort(arr,start,mid);
+        mergeSort(arr,mid+1,end);
+        merge(arr,start,mid,end);
+    }
