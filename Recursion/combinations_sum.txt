@@ -1,0 +1,37 @@
+Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. 
+You may return the combinations in any order.
+
+The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+It is guaranteed that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> arr;
+    vector<int> temp;
+    int size;
+    void helper(int sum,vector<int> &temp,int index){
+        if(sum==0){
+            res.push_back(temp);
+            return;
+        }
+        while(index<size && sum-arr[index]>=0){
+            
+            temp.push_back(arr[index]);
+            helper(sum-arr[index],temp,index);
+            
+            index++;
+            temp.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        size=candidates.size();
+        sort(candidates.begin(),candidates.end());
+        for(auto x:candidates){
+            arr.push_back(x);
+        }
+        helper(target,temp,0);
+        return res;
+    }
+};
