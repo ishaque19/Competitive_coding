@@ -8,4 +8,4 @@ This repository is open for all people who loves to learn competitive coding and
                                         if(lovetolearn)
                                             open success;
                                         else
-                                              lovetolearn++;   
+                                            lovetolearn++;   
