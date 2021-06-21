@@ -1,0 +1,32 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef struct node{
+    int age;
+    char xh;
+}*ishak;
+struct alhamdulliha{
+    bool operator()(ishak x,ishak y){
+        if(x->age<y->age)
+            return false;
+        else
+            return  true;
+    }
+};
+int main()
+{
+    priority_queue<ishak,vector<ishak>,alhamdulliha> Q;
+    ishak x=new node();
+    x->age=4;
+    x->xh='a';
+    Q.push(x);
+    x=new node();
+    x->age=9;
+    x->xh='c';
+    Q.push(x);
+    
+    cout<<Q.top()->age;
+    Q.pop();
+    cout<<Q.top()->age;
+    return 0;
+}

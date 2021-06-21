@@ -1,0 +1,45 @@
+Given an input stream of N integers. The task is to insert these numbers into a new stream and find the median of the stream formed by each insertion of X to the new stream.
+
+
+priority_queue<int> q1;// default prioity queue:max heap
+    priority_queue<int,vector<int>,greater<int>> q2;//min heap
+    //Function to insert heap.
+    void insertHeap(int &x)
+    {
+        if(q1.empty() ||  x<=q1.top())
+            q1.push(x);
+        else
+            q2.push(x);
+        balanceHeaps();
+    }
+    
+    //Function to balance heaps.
+    void balanceHeaps()
+    {
+        //adjust queues with diff of size b/w them is >1
+        if(q1.size()>q2.size()+1){
+            q2.push(q1.top());
+            q1.pop();
+        }
+        else if(q2.size()>q1.size()+1){
+            q1.push(q2.top());
+            q2.pop();
+        }
+        else{
+            //no need to adjust if size==0 || size==1
+        }
+    }
+    
+    //Function to return Median.
+    double getMedian()
+    {
+        if(q1.size()==q2.size()){
+            return (double)(q1.top()+q2.top())/(double)2;
+        }
+        else{
+            if(q1.size()>q2.size())
+                return q1.top();
+            else
+                return q2.top();
+        }
+    }

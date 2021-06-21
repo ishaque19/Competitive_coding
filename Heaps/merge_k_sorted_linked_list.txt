@@ -1,0 +1,67 @@
+You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.
+
+//can also do in divide and conquer
+
+struct minheap{
+    bool operator()(pair<int,ListNode *> &a,pair<int,ListNode *> &b){
+        return a.first>b.first;
+    }
+};
+class Solution {
+public:
+    ListNode *head=NULL,*itr;
+    priority_queue<pair<int,ListNode *>,vector<pair<int,ListNode *>>,minheap> Q;
+    ListNode *createnode(int x,ListNode *y){
+        ListNode *temp=new ListNode();
+        temp->val=x;
+        temp->next=y;
+        return temp;
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.size()==0)
+            return NULL;
+        for(int i=0;i<lists.size();i++){
+            ListNode *temp=lists[i];
+            if(temp){
+                pair<int,ListNode *> c=make_pair(temp->val,temp->next);
+                Q.push(c);
+            }
+        }/*
+        pair<int,ListNode *>x=Q.top();
+        Q.pop();
+        cout<<x.first<<endl;
+        
+        x=Q.top();
+        Q.pop();
+        cout<<x.first<<endl;
+        
+        x=Q.top();
+        Q.pop();
+        cout<<x.first<<endl;*/
+        
+        if(!Q.empty()){
+        pair<int,ListNode*> c=Q.top();
+        head=createnode(c.first,c.second);
+        itr=head;
+        ListNode *next_ele=head->next;
+        if(next_ele){
+            Q.push(make_pair(next_ele->val,next_ele->next));
+        }
+        Q.pop();
+        }
+        while(!Q.empty()){
+            pair<int,ListNode*> c=Q.top();
+            ListNode *temp=createnode(c.first,c.second);
+            itr->next=temp;
+            itr=itr->next;
+            ListNode *next_ele=temp->next;
+            if(next_ele){
+                Q.push(make_pair(next_ele->val,next_ele->next));
+            }
+            Q.pop();
+        }
+        return head;
+    }
+};

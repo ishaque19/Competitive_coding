@@ -1,0 +1,94 @@
+Rearrange characters in such a way that no two adajacents chars repeated if possible to do return 1 else 0
+
+int main() {
+	//code
+	int t;
+	unordered_map<char,int> freq;
+	//cout<<freq['a'];
+	cin>>t;
+	while(t--){
+	    string x;
+	    int flag=1;
+	    int max=0;
+	    cin>>x;
+	    if(x.size()==1)
+	        return 1;
+	    for(int i=0;i<x.size();i++){
+	        freq[x[i]]++;
+	        if(freq[x[i]]>max)
+	            max=freq[x[i]];
+	    }
+	    if(max-1<=x.size()-max){
+	        cout<<1<<endl;
+	    }
+	    else{
+	        cout<<0<<endl;
+	    }
+	    x.clear();
+	    freq.clear();
+	}
+	return 0;
+}
+----------------------------------------------------------------
+With Heaps:
+
+/*struct qnode{
+    char ch;
+    int freq;
+};
+struct comparefreq{
+    bool operator()(pair<char,int> a, pair<char,int> b){
+        return a.second>b.second;
+    }
+};*/
+class Solution {
+public:
+    /*struct qnode* create(char x,int i){
+        struct qnode *temp=new qnode();
+        temp->ch=x;
+        temp->freq=i;
+        return temp;
+    }*/
+    priority_queue<pair<int,char>> Q;
+    unordered_map<char,int>freq;
+    string res="";
+    string reorganizeString(string s) {
+        for(auto x:s){
+            freq[x]++;
+        }
+        for(auto &it:freq){
+            //struct qnode *x=create(it->first,it->second);
+            Q.push(make_pair(it.second,it.first));
+        }
+        
+       // pair<int,char> c=Q.top();
+        //cout<<c.first<<" "<<c.second;
+        while(Q.size()>=2){
+        
+        pair<int,char> a=Q.top();Q.pop();
+        pair<int,char> b=Q.top();Q.pop();
+        res+=a.second;
+        res+=b.second;
+        a.first--;
+        b.first--;
+        if(a.first!=0)
+            Q.push(a);
+        if(b.first!=0)
+            Q.push(b);
+        }
+        
+        if(Q.size()==1){
+            pair<int,char> finalone=Q.top();
+            if(finalone.first==1){
+                res+=finalone.second;
+                return res;
+            }
+            else{
+                return "";
+            }
+        }
+        else{
+            return res;
+        }
+    }
+};
