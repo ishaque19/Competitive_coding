@@ -1,0 +1,22 @@
+Given a sorted array of size N and an integer K, find the position at which K is present in the array using binary search.
+
+class Solution{
+public:
+    int helper(int arr[],int l,int h,int k){
+        if(l>h)
+            return -1;
+        int mid=floor((l+h)/2);
+        if(arr[mid]==k){
+            return mid;
+        }
+        else if(arr[mid]<k){
+            return helper(arr,mid+1,h,k);
+        }
+        else{
+            return helper(arr,l,mid-1,k);
+        }
+    }
+    int binarysearch(int arr[], int n, int k){
+        return helper(arr,0,n-1,k);
+    }
+};
