@@ -1,0 +1,89 @@
+ Given a dictionary of distinct words and an M x N board where every cell has one character. 
+ Find all possible words from the dictionary that can be formed by a sequence of adjacent characters on the board. 
+ We can move to any of 8 adjacent characters, but a word should not have multiple instances of the same cell.
+	vector<string> found;
+    int n;
+    int m;
+    bool flag=false;
+    void helper(vector<vector<bool>> &visited,vector<vector<char> >& board, string str,int pos,int row,int col){
+        if(pos==str.size()){
+            flag=true;
+            return;
+        }
+        else if(row==-1 && col==-1){ //can choose from anywhere as first char
+            for(int i=0;!flag && i<n;i++){
+                for(int j=0;!flag && j<m;j++){
+                    if(!flag && board[i][j]==str[pos] && !visited[i][j]){
+                        visited[i][j]=true;
+                        helper(visited,board,str,pos+1,i,j);
+                        visited[i][j]=false;
+                    }
+                }
+            }
+        }
+        else{ //should move only in 8 dir
+            if(!flag && row-1>=0 && row-1<n){ //r[i-1]
+                if(!flag && col-1>=0 && col-1<m && board[row-1][col-1]==str[pos] && !visited[row-1][col-1]){ //r[i-1]c[i-1]
+                    visited[row-1][col-1]=true;
+                    helper(visited,board,str,pos+1,row-1,col-1);
+                    visited[row-1][col-1]=false;
+                }
+                if(!flag && col>=0 && col<m && board[row-1][col]==str[pos] && !visited[row-1][col]){ //r[i-1]c[i]
+                    visited[row-1][col]=true;
+                    helper(visited,board,str,pos+1,row-1,col);
+                    visited[row-1][col]=false;
+                }
+                if(!flag && col+1>=0 && col+1<m && board[row-1][col+1]==str[pos] && !visited[row-1][col+1]){ //r[i-1]c[i+1]
+                    visited[row-1][col+1]=true;
+                    helper(visited,board,str,pos+1,row-1,col+1);
+                    visited[row-1][col+1]=false;
+                }
+            }
+            
+            if(!flag && row>=0 && row<n){ //same row //r[i]
+                if(!flag && col-1>=0 && col-1<m && board[row][col-1]==str[pos] && !visited[row][col-1]){ //r[i]c[i-1]
+                    visited[row][col-1]=true;
+                    helper(visited,board,str,pos+1,row,col-1);
+                    visited[row][col-1]=false;
+                }
+                if(!flag && col+1>=0 && col+1<m && board[row][col+1]==str[pos] &&  !visited[row][col+1]){ //r[i]c[i+1]
+                    visited[row][col+1]=true;
+                    helper(visited,board,str,pos+1,row,col+1);
+                    visited[row][col+1]=false;
+                }
+            }
+            
+            if(!flag && row+1>=0 && row+1<n){ //r[i+1]
+                if(!flag && col-1>=0 && col-1<m && board[row+1][col-1]==str[pos] && !visited[row+1][col-1]){ //r[i+1]c[i-1]
+                    visited[row+1][col-1]=true;
+                    helper(visited,board,str,pos+1,row+1,col-1);
+                    visited[row+1][col-1]=false;
+                }
+                if(!flag && col>=0 && col<m && board[row+1][col]==str[pos] && !visited[row+1][col]){ //r[i+1]c[i]
+                    visited[row+1][col]=true;
+                    helper(visited,board,str,pos+1,row+1,col);
+                    visited[row+1][col]=false;
+                }
+                if(!flag && col+1>=0 && col+1<m && board[row+1][col+1]==str[pos] && !visited[row+1][col+1]){ //r[i+1]c[i+1]
+                    visited[row+1][col+1]=true;
+                    helper(visited,board,str,pos+1,row+1,col+1);
+                    visited[row+1][col+1]=false;
+                }
+            }
+        }
+    }
+	vector<string> wordBoggle(vector<vector<char> >& board, vector<string>& dictionary) {
+	    // Code here
+	    n=board.size(); //(n,m)
+	    m=board[0].size();
+        vector<vector<bool> > visited(n,vector<bool>(m,false)); //of type n*m board always
+	    for(auto x:dictionary){
+	        helper(visited,board,x,0,-1,-1);
+	        if(flag){     
+	            found.push_back(x);
+	            flag=false;
+	        }
+	    }
+	    
+	    return found;
+	}

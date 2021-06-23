@@ -1,0 +1,79 @@
+Given an incomplete Sudoku configuration in terms of a 9 x 9  2-D square matrix (grid[][]), 
+the task to find a solved Sudoku. For simplicity, you may assume that there will be only one unique solution.
+
+class Solution 
+{
+    public:
+    bool flag=false;
+    bool can_we_place(int grid[N][N],int row,int col,int ele){
+        for(int i=0;i<N;i++){ //col check //row check
+            if(grid[row][i]==ele || grid[i][col]==ele)
+                return false;
+        }
+        //box check
+        for(int i=0;i<N;i+=3){
+            for(int j=0;j<N;j+=3){
+                if(row>=i && row<=i+2 && col>=j && col<=j+2){
+                    //(i,i)  (i,j+2)
+                    //(i+2,j)  (i+2,j+2)
+                    for(int m=i;m<=i+2;m++){
+                        for(int n=j;n<=j+2;n++){
+                            if(grid[m][n]==ele)
+                                return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+    
+    void sudoku(int grid[N][N]){
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                if(flag)
+                    return;
+                if(grid[i][j]==0){
+                    for(int x=1;x<=9;x++){
+                        bool proceed=can_we_place(grid,i,j,x);
+                        if(!proceed)
+                            continue;
+                        grid[i][j]=x;
+                        SolveSudoku(grid);
+                        if(!flag){
+                            grid[i][j]=0;
+                            continue;
+                        }
+                        else{
+                            return;
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+        // all pos are filled
+        flag=true;
+        return;
+        
+    }
+    //Function to find a solved Sudoku. 
+    bool SolveSudoku(int grid[N][N])  
+    { 
+        // Your code here
+        sudoku(grid);
+        return true;
+    }
+    
+    //Function to print grids of the Sudoku.
+    void printGrid (int grid[N][N]) 
+    {
+        // Your code here 
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                cout<<grid[i][j]<<" ";
+            }
+        }
+    
+    }
+};

@@ -1,0 +1,78 @@
+class Solution {
+public:
+    vector<string> res;
+    string q;
+    string temp="";
+    bool validip(string str){
+        int n=stoi(str);
+        return (n>=0 && n<=255);
+    }
+    bool nofrontzero(string str){
+        if(str.size()==1)
+                return true;
+        else{
+            if(str[0]=='0')
+                return false;
+            else
+                return true;
+        }
+            
+    }
+    void helper(int octet,int pos){
+        if(pos==q.size()){
+                //not anymore available
+                return;
+        }
+        
+        else if(octet==4){
+            string x=q.substr(pos,q.size()-pos);
+            if(validip(x) && nofrontzero(x)){
+                int prev_end_pos=temp.size()-1;
+                temp+=x; //4th octet completed
+                res.push_back(temp);
+                //remove things which is added at 4th octet
+                temp.erase(prev_end_pos+1);
+                return;
+                //cout<<temp<<endl;
+                //cout<<res[0]<<endl;
+                //exit(0);
+            }
+        }
+        else{
+            for(int len=1; pos+len<=q.size() ;len++){
+                string x=q.substr(pos,len);
+                if(nofrontzero(x) && validip(x)) {
+                    int prev_end_pos=temp.size()-1;
+                    temp+=x;
+                    temp+='.'; //octet completed
+                    helper(octet+1,pos+len);
+                    temp.erase(prev_end_pos+1);
+                }
+                else{
+                    return;
+                }
+            }
+            return;
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        // Your code here
+        if(s.size()<=3 || s.size()>12)
+            return res;
+        if(s.size()==4){
+            string temp="";
+            for(int i=0;i<s.size();i++){
+                temp+=s[i];
+                temp+='.';
+            }
+            temp.erase(temp.size()-1);
+            res.push_back(temp);
+            return res;
+        }
+        q=s;
+        helper(1,0);
+        //cout<<s.substr(0,3);
+        
+        return res;   
+    }
+};

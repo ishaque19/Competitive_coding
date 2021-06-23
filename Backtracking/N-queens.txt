@@ -1,0 +1,81 @@
+The n-queens puzzle is the problem of placing n queens on a (n×n) chessboard such that no two queens can attack each other.
+
+class Solution{
+public:
+    vector<vector<int>> res;
+    vector<int> temp;
+    vector<pair<int,int>> curr;
+    int N;
+    bool more=false;
+    bool check_attacks(int row,int col){
+        int flag=0;
+        for(auto &x:curr){
+            if(x.second==col)
+                break;
+            else
+                flag++;
+        }
+        if(flag==curr.size()){ //no col attack
+            //check for diagonal
+            int flag2=0;
+            for(auto &x:curr){
+                if(abs(x.first-row) != abs(x.second-col))
+                    flag2++;
+                else
+                    break;
+            }
+            
+            if(flag2==curr.size())
+                return true;
+            else
+                return false;
+        }
+        else{
+            return false;
+        }
+    }
+    void nqueen_helper(int queen){
+        if(queen<=N){
+        for(int i=1;i<=N;i++){
+            if(curr.empty()){
+                curr.push_back(make_pair(queen,i));
+                nqueen_helper(queen+1);
+                if(curr.size()!=N || more){
+                    curr.pop_back();
+                    more=false;
+                    continue;
+                }
+            }
+            else{
+                bool proceed=check_attacks(queen,i);
+                if(!proceed)
+                    continue;
+                curr.push_back(make_pair(queen,i));
+                nqueen_helper(queen+1);
+                if(curr.size()!=N || more){
+                    curr.pop_back();
+                    more=false;
+                    continue;
+                }
+            }
+        }
+        }
+        else{ //found one res
+            for(auto &x:curr){
+                temp.push_back(x.second);
+                //cout<<x.second<<" ";
+            }
+            res.push_back(temp);
+            temp.clear();
+            more=true;
+            return;
+        }
+        
+    }
+    vector<vector<int>> nQueen(int n) {
+        // code here
+        N=n;
+        nqueen_helper(1);
+        return res;
+    }
+};

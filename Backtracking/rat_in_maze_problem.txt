@@ -1,0 +1,77 @@
+Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at (N - 1, N - 1). 
+Find all possible paths that the rat can take to reach from source to destination. The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). 
+Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it while value 1 at a cell in the matrix represents that rat can be travel through it.
+Note: In a path, no cell can be visited more than one time..
+
+class Solution{
+    public:
+    vector<string> res;
+    vector<char> temp;
+    
+    int N;
+    void helper(vector<vector<int>> &m,int row,int col,vector<vector<bool>> &visited){
+        if(row==N-1 && col==N-1){
+            //found one path
+            string cp="";
+            for(auto x:temp){
+                cp+=x;
+            }
+            res.push_back(cp);
+            return;
+        }
+        if(row-1>=0 && row-1<N){ //valid index
+            if(m[row-1][col]==1 && !visited[row-1][col]){
+                visited[row-1][col]=true;
+                temp.push_back('U');
+                helper(m,row-1,col,visited);
+                temp.pop_back();
+                visited[row-1][col]=false;
+            }
+        }
+        if(row+1>=0 && row+1<N){
+            if(m[row+1][col]==1 && !visited[row+1][col]){
+                visited[row+1][col]=true;
+                temp.push_back('D');
+                helper(m,row+1,col,visited);
+                temp.pop_back();
+                visited[row+1][col]=false;
+            }
+        }
+        if(col-1>=0 && col-1<N){
+            if(m[row][col-1]==1 && !visited[row][col-1]){
+                visited[row][col-1]=true;
+                temp.push_back('L');
+                helper(m,row,col-1,visited);
+                temp.pop_back();
+                visited[row][col-1]=false;
+            }
+        }
+        if(col+1>=0 && col+1<N){
+            if(m[row][col+1]==1 && !visited[row][col+1]){
+                visited[row][col+1]=true;
+                temp.push_back('R');
+                helper(m,row,col+1,visited);
+                temp.pop_back();
+                visited[row][col+1]=false;
+            }
+        }
+        
+        //couldn't find any possible moves
+        return;
+    }
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        // Your code goes here
+        if(m[n-1][n-1]==0 || m[0][0]==0)
+            return res;
+        N=n;  
+        
+        vector<vector<bool>> visited(N,vector<bool>(N,false));
+        //(or)
+        //vector<bool> init(N,false);
+        //vector<vector<bool>> visited(N,init);
+        visited[0][0]=true;
+        helper(m,0,0,visited);
+        sort(res.begin(),res.end());
+        return res;
+    }
+};
