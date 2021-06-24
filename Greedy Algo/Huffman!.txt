@@ -1,0 +1,150 @@
+
+---------------------------------------------------------------------------------------------
+Huffman-Decoding 
+
+string decode_file(struct MinHeapNode* root, string s)
+{
+    string dec_msg="";
+    struct MinHeapNode* it=root;
+    if(s.size()<2){ //constraints
+        return dec_msg;
+    }
+    for(auto x:s){
+        if(!it->left && !it->right){// we reached leaf
+            dec_msg+=it->data;
+            it=root;
+        }
+        
+        if(x=='0'){
+            it=it->left;
+        }
+        else{
+            it=it->right;
+        }
+    }
+    if(!it->left && !it->right){// we reached leaf
+            dec_msg+=it->data;
+            it=root;
+    }
+        
+    return dec_msg;
+}
+---------------------------------------------------------------------------------------------
+			/*********ALONG WITH HUFFMAN ENCODING AND DECODING*******************/	 
+struct node{
+    int  freq;
+    char ch;
+    struct node *left;
+    struct node *right;
+};
+struct comparator{
+    bool operator()(struct node *p,struct node *q){
+        return q->freq<p->freq;
+    }   
+};
+class Solution {
+public:
+    unordered_map<char,string> encoded;
+    struct node *root=NULL;
+    struct node *create(char x,int no){
+        struct node *temp=new node();
+        temp->ch=x;
+        temp->freq=no;
+        temp->left=NULL;
+        temp->right=NULL;
+        return temp;
+    }
+    
+    void pre_order_traversal(struct node *root,string &append){
+        if(root->ch!='$'){ //we reached some valid leaf node
+            encoded[root->ch]=append;
+        }
+        if(root->left){
+            append+='0';
+            pre_order_traversal(root->left,append);
+            append.erase(append.size()-1);
+        }
+        if(root->right){
+            append+='1';
+            pre_order_traversal(root->right,append);
+            append.erase(append.size()-1);        
+        }
+    }
+    string encode(string longUrl) {
+        priority_queue<struct node*,vector<struct node*>,comparator> Q; //min heap
+        unordered_map<char,int> track;
+        
+        for(auto i:longUrl){
+            track[i]++;
+        }
+        for(auto i:track){
+            struct node *temp=create(i.first,track[i.first]);
+            Q.push(temp);
+        }
+        
+        /*while(!Q.empty()){
+        struct node *x=Q.top();
+        cout<<x->freq<<" "<<x->ch<<endl;
+        Q.pop();
+        }*/
+        
+        while(Q.size()>1){
+        struct node *one=Q.top();
+        Q.pop();
+        struct node *two=Q.top();
+        Q.pop();
+        
+        struct node *parent=create('$',one->freq+two->freq);
+        parent->left=one;
+        parent->right=two;
+        Q.push(parent);
+        }
+        
+        if(Q.size()==1){
+            root=Q.top(); //build the tree and got root;
+            Q.pop();
+        }
+        
+        //need tree traversal
+        string msg="";
+        pre_order_traversal(root,msg);
+        string encoded_str="";
+        for(auto i:longUrl){
+            encoded_str+=encoded[i];
+        }
+        
+        return encoded_str;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    string decode(string s) {
+    string dec_msg="";
+    struct node* it=root;
+    if(s.size()<2){ //constraints
+        return dec_msg;
+    }
+    for(auto x:s){
+        if(!it->left && !it->right){// we reached leaf
+            dec_msg+=it->ch;
+            it=root;
+        }
+        
+        if(x=='0'){
+            it=it->left;
+        }
+        else{
+            it=it->right;
+        }
+    }
+    if(!it->left && !it->right){// we reached leaf
+            dec_msg+=it->ch;
+            it=root;
+    }
+        
+    return dec_msg;
+    }
+};
+
+// Your Solution object will be instantiated and called as such:
+// Solution solution;
+// solution.decode(solution.encode(url));

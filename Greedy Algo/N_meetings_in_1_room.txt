@@ -1,0 +1,30 @@
+There is one meeting room in a firm. There are N meetings in the form of (S[i], F[i]) where S[i] is start time of meeting i and F[i] is finish time of meeting i.
+What is the maximum number of meetings that can be accommodated in the meeting room when only one meeting can be held in the meeting room at a particular time? 
+Also note start time of one chosen meeting can't be equal to the end time of the other chosen meeting.
+static bool duration(pair<int,int> a, pair<int,int> b){ //sort on end time
+        return a.second<b.second;
+    }
+
+    int maxMeetings(int start[], int end[], int n)
+    {
+        int res=0;
+        vector<pair<int,int>> activity(n,{0,0}); //initialized
+        for(int i=0;i<n;i++){
+            activity[i]=make_pair(start[i],end[i]);
+        }
+        sort(activity.begin(),activity.end(),duration);
+        
+        int prev_sel_end=INT_MIN;
+        for(auto x:activity){
+            //cout<<x.first<<" "<<x.second<<endl;
+            if(x.first>prev_sel_end){
+                res++;
+                prev_sel_end=x.second;
+            } 
+            else{
+                continue;
+            }
+        }
+        
+        return  res;
+    }

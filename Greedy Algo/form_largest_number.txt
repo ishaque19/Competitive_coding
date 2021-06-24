@@ -1,0 +1,32 @@
+Given two numbers 'N' and 'S' , find the largest number that can be formed with 'N' digits and whose sum of digits should be equals to 'S'.
+You do not need to read input or print anything. Your task is to complete the function findLargest() 
+which takes N and S as input parameters and returns the largest possible number. Return -1 if no such number is possible.
+
+
+string findLargest(int N, int S){
+        // code here
+        string res="";
+        if(N==1 && S>=0 && S<=9){
+            res+=S+'0';
+            return res;
+        }
+        if(N>1 && S==0){
+            return to_string(-1);
+        }
+        
+        for(int i=1;i<=N;i++){
+            if(S-9>=0){
+                res+='9';
+                S-=9;
+            }
+            else{
+                char x='0'+S;
+                res+=x;
+                S-=S;
+            }
+        }
+        if(S>=1){
+            return to_string(-1);
+        }
+        return res;
+    }

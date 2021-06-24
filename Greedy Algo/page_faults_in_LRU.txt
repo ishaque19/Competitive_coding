@@ -1,0 +1,108 @@
+Given a sequence of pages in an array pages[] of length N and memory capacity C, find the number of page faults using Least Recently Used (LRU) Algorithm. 
+
+
+struct DLNode
+    {
+        int key;
+        int value;
+        DLNode *prev;
+        DLNode *next;
+    };
+    
+    DLNode *head;
+    DLNode *tail;
+    int capacity;
+    unordered_map<int, DLNode *> cache;
+    int page_fault=0;
+
+    
+
+class Solution{
+public:
+// adding the new node always after the head
+    void addNode(DLNode *node)
+    {
+        node->prev = head;
+        node->next = head->next;
+        node->next->prev = node;
+        head->next->prev = node;
+        head->next = node;
+    }
+
+    // removing the node from DLL
+    void removeNode(DLNode *node)
+    {
+        if (node->prev)
+            node->prev->next = node->next;
+        if (node->next)
+            node->next->prev = node->prev;
+    }
+    // move the node from any position to dummy head's next
+    void moveToHead(DLNode *node)
+    {
+        removeNode(node);
+        addNode(node);
+    }
+    // pop the original tail. its the node previous to the dummy tail
+    DLNode *popTail()
+    {
+        DLNode *originalTail = tail->prev;
+        removeNode(originalTail);
+        return originalTail;
+    }
+    
+    int get(int key)
+    {
+        // if key is present, renew the DLL and return the value
+        if (cache.find(key) != cache.end())
+        {
+            return cache[key]->value;
+        }
+    
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        if (cache.find(key) != cache.end())
+        {
+            // key found, update the value
+            cache[key]->value = value;
+            moveToHead(cache[key]);
+        }
+        else
+        {
+            // node not found
+            // add the new key to cache and update head of DLL
+            page_fault++;
+            DLNode *newNode = new DLNode();
+            newNode->key = key;
+            newNode->value = value;
+            moveToHead(newNode);
+            cache[key] = newNode; //placing new node inside cache
+
+            if (cache.size() > capacity)
+            {
+                DLNode *tailNode = popTail();
+                cache.erase(tailNode->key);
+            }
+        }
+    }
+    
+    int pageFaults(int N, int C, int pages[]){
+        page_fault=0;
+        capacity = C;
+        head = new DLNode(); //dummy head
+        tail = new DLNode(); // dummy tail
+        head->prev = nullptr;
+        head->next = tail;
+        tail->prev = head;
+        tail->next = nullptr;
+        for(int i=0;i<N;i++){
+            put(pages[i],pages[i]);
+        }
+        head=NULL;
+        tail=NULL;
+        cache.clear();
+        return page_fault;
+    }

@@ -1,0 +1,116 @@
+You are given a string s of lower case english alphabets. You can choose any two characters in the string 
+and replace all the occurences of the first character with the second character and replace all the occurences of the second character with the first character.
+Your aim is to find the lexicographically smallest string that can be obtained by doing this operation at most once.
+//correct approach
+set<char> s;
+    void helper(char replace_with, char replace_this , string &a){
+        for(int i=0;i<a.size();i++){
+                if(a[i]==replace_with){
+                    a[i]=replace_this;
+                }
+                else if(a[i]==replace_this){
+                    a[i]=replace_with;
+                }
+                else{
+                    //leave it
+                }
+        }
+        return;
+    }
+    
+    string chooseandswap(string a){
+        for(auto x:a){s.insert(x);} //now in ordered 
+        
+        for(int i=0;i<a.size();i++){
+            s.erase(a[i]);
+            if(s.empty()){break;} //no min char availables
+            char minimum=*s.begin();
+            if(minimum<a[i]){
+                helper(minimum,a[i],a);
+                break;
+            }
+        }
+        
+        s.clear(); //important as they provide consistently many test cases
+        return a;
+    }
+_---------------------------------------------------------------------_---------------------------------------------------------------------
+string chooseandswap(string a){
+        // Code Here
+        int min=INT_MAX,index=-1;
+        for(int i=0;i<a.size();i++){
+            int ascii=a[i];
+            if(ascii<min){
+                min=ascii;
+                index=i;
+            }
+        }
+        
+        if(index!=0){
+            //replace
+            char replace_with=a[index];
+            char replace_this=a[0];
+            
+            for(int i=0;i<a.size();i++){
+                if(a[i]==replace_with){
+                    a[i]=replace_this;
+                }
+                else if(a[i]==replace_this){
+                    a[i]=replace_with;
+                }
+                else{
+                    //leave it
+                }
+            }
+        }
+        
+        return a;
+        
+    }
+	_---------------------------------------------------------------------
+	void helper(char replace_with, char replace_this , string &a){
+        for(int i=0;i<a.size();i++){
+                if(a[i]==replace_with){
+                    a[i]=replace_this;
+                }
+                else if(a[i]==replace_this){
+                    a[i]=replace_with;
+                }
+                else{
+                    //leave it
+                }
+        }
+        return;
+    }
+    bool isinfront(int pos,char check, string &a){
+        for(int i=pos-1;i>=0;i--){
+            if(a[i]==check){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    string chooseandswap(string a){
+        if(a.size()==1 || a.size()==0){return a;}
+        vector<int> maps(26,0); //no of alphabets
+        for(auto x:a){
+            int ascii=x;
+            if(ascii>=97 && ascii<=122)
+                maps[ascii-97]=1; //mapping f(n)
+        }
+        
+        for(int l=0;l<a.size() && a[l]>=97 && a[l]<=122;l++){
+            
+            for(int i=0;i<26;i++){
+                if(maps[i]==1){
+                    char min_one=(i+97);
+                    if(min_one<a[l] && isinfront(l,min_one,a)){ //we should replace //founded!!
+                        helper(min_one,a[l],a);
+                        return a;
+                    }
+                }
+            }
+            
+        }
+    }

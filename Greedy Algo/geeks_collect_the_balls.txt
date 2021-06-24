@@ -1,0 +1,50 @@
+There are two parallel roads, each containing N and M buckets, respectively. Each bucket may contain some balls.
+ The balls in first road are given in an array a and balls in the second road in an array b. 
+ The buckets on both roads are kept in such a way that they are sorted according to the number of balls in them. 
+ Geek starts from the end of the road which has the bucket with a lower number of balls
+ (i.e. if buckets are sorted in increasing order, then geek will start from the left side of the road).
+Geek can change the road only at a point of intersection ie- a point where buckets have the same number of balls on two roads. 
+Help Geek collect the maximum number of balls!
+
+
+		vector<int> intersect;
+        int res=0;
+        int a[N+1],b[M+1];
+        for(int x=0;x<N;x++){
+            a[x]=ar[x];
+        }a[N]=INT_MAX;
+        for(int x=0;x<M;x++){
+            b[x]=br[x];
+        }b[M]=INT_MAX;
+        
+        int i=0,j=0;
+        while(i<=N && j<=M){
+            if(a[i]>b[j])
+                j++;
+            else if(a[i]<b[j])
+                i++;
+            else{
+                intersect.push_back(a[i]); //common element
+                i++;j++;
+            }
+        }
+        
+        int i1=0,i2=0,i3=0;
+        
+        while(i1<=N && i2<=M){
+            int common_element=intersect[i3++];
+            auto it_a=upper_bound(a,a+N,common_element)-a; //strictly greater
+            auto it_b=upper_bound(b,b+M,common_element)-b;
+            int first=0,second=0;
+            while(i1!=it_a && i1<=N){
+                first+=a[i1++];   
+            }
+            while(i2!=it_b && i2<=M){
+                second+=b[i2++];
+            }
+            res+=max(first,second);
+        }
+        
+        return res-INT_MAX;
+	}
+    
