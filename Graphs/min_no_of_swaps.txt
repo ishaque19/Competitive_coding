@@ -1,0 +1,41 @@
+Given an array of n distinct elements. Find the minimum number of swaps required to sort the array in strictly increasing order.
+
+unordered_map<int,pair<int,bool>> links ;
+    
+    //helper function
+    int checklength(int start, int index){
+         //visited
+        int value=0;
+        while(links[index].first != start){
+            links[index].second=true;
+            value++;
+            index=links[index].first;
+        }
+        links[index].second=true;
+        return value;
+    }
+    
+    //Function to find the minimum number of swaps required to sort the array. 
+	int minSwaps(vector<int>&nums)
+	{
+	   // sort and map
+	   vector<int> sorted(nums);
+	   sort(sorted.begin(),sorted.end()); //sorted
+	   for(int i=0;i<nums.size();i++){
+	       links[nums[i]]=make_pair(sorted[i],false);
+	   } //mapped successfully
+	   int res=0;
+	   for(auto &x:links){
+	       if(!x.second.second){
+	            if(x.first==x.second.first){ //no swap at this position
+	                //cout<<x.first<<" "<<x.second.first<<" "<<x.second.second<<endl;
+	                continue;
+	            }
+	            else{
+	                res+=checklength(x.first,x.first);
+	            }
+	       }
+	   }
+	   
+	   return res;
+	}

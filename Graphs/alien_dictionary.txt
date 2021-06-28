@@ -1,0 +1,83 @@
+
+Given a sorted dictionary of an alien language having N words and k starting alphabets of standard dictionary. Find the order of characters in the alien language.
+Note: Many orders may be possible for a particular test case, thus you may return any valid order and output will be 1 
+if the order of string returned by the function is correct else 0 denoting incorrect string returned.
+
+public:
+     vector<int> res;
+    void topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<pair<int,int>> degree;
+	   
+	    int count=0;
+	    for(int i=0;i<V;i++){ //initialization
+	        degree.push_back(make_pair(i,0));
+	    }
+	    
+	    //cout<<degree[5].second<<endl;
+	    for(int i=0;i<V;i++){
+	        for(auto neighbor:adj[i]){
+	            degree[neighbor].second++;
+	        }
+	    } //founded indegree successfully.
+	    
+	    queue<pair<int,int>> Q;
+	    for(auto it : degree){ 
+	        if(it.second==0){
+	            Q.push(it);
+	        }
+	    } //pushed indegree of 0 elements successfully.
+	    
+	    while(!Q.empty()){
+	        pair<int,int> prior=Q.front();
+	        for(auto it:adj[prior.first]){
+	            degree[it].second--;
+	            if(degree[it].second==0)
+	                Q.push(make_pair(it,0));
+	        }
+	        res.push_back(prior.first);
+	        Q.pop();
+	        count++;
+	    }
+	    
+	     //topological order not possible if res provided is empty.
+	        return;
+	}   
+	 
+    string findOrder(string dict[], int N, int K) {
+        vector<int> adj[K];
+        
+        for(int i=0,j=1;j<N;i++,j++){
+            string x=dict[i];
+            string y=dict[j];
+            int it=0;
+            while(it<x.size() && it<y.size() && x[it]==y[it]){ //iterate till chars match
+                        it++;
+            }
+            if(it<x.size() && it<y.size()){
+            int p=x[it]-'a';//cout<<p<<" ";
+            int q=y[it]-'a';//cout<<q<<endl;
+            adj[p].push_back(q); 
+            }//mapping done
+            
+        } //graph created.
+        
+        /*for(int i=0;i<K;i++){
+            cout<<i<<":";
+            for(auto x:adj[i]){
+                cout<<x<<" ";
+            }
+            cout<<endl;
+        }*/
+        
+        topoSort(K,adj);
+        string order="";
+    
+        for(auto x:res){
+         //   cout<<x<<endl;
+            char y=(x+97);
+            order+=y;
+        }
+       // cout<<order<<endl;
+        return order;
+    }

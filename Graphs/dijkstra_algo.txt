@@ -1,0 +1,45 @@
+Given a weighted, undirected and connected graph of V vertices and E edges, Find the shortest distance of all the vertex's from the source vertex S.
+Note: The Graph doesn't contain any negative weight cycle.
+
+class Solution
+{
+	public:
+	void helper(int node,vector<vector<int>> adj[], vector<bool> &visited, vector<int> &res){
+	    visited[node]=true; //node is minimum
+	    
+	    int index=-1,min=INT_MAX;
+	    //start relaxation
+	    for(auto neighbor: adj[node]){ //neighbor is a vector of 2 elements 0->Vertex 1->weight
+	        if(!visited[neighbor[0]] && res[node]+neighbor[1]<res[neighbor[0]]){
+	            res[neighbor[0]]=res[node]+neighbor[1];
+	            /*if(res[neighbor[0]]<min){ 
+	                //this one will check the min with respected to updated one only
+	                //but we need to check in whole res array
+	                min=res[neighbor[0]];
+	                index=neighbor[0];
+	            }*/
+	       }
+	    }
+	    for(int i=0;i<visited.size();i++){
+	        if(!visited[i] && res[i]<min){
+	            min=res[i];
+	            index=i;
+	        }
+	    }
+	    if(index!=-1)
+	        helper(index,adj,visited,res);
+	    return;     
+	}
+	
+	//Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
+    {
+            //create one visited and short_distance vector
+            vector<bool> visited(V,false);
+            vector<int> res(V,INT_MAX);
+            res[S]=0;
+            
+            helper(S,adj,visited,res);
+            return res;
+    }

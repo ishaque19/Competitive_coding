@@ -1,0 +1,118 @@
+Given an array of lowercase strings A[] of size N, determine if the strings can be chained together to form a circle. A
+string X can be chained together with another string Y if the last character of X is same as first
+character of Y. If every string of the array can be chained, it will form a circle.
+
+For eg for the array arr[] = {"for", "geek", "rig", "kaf"} the answer will be Yes as the given strings can be chained as "for", "rig", "geek" and "kaf"
+
+stack<int> S;
+    int  flag=0;
+	//Function to find number of strongly connected components in the graph.
+    void dfs(int node, vector<int> adj[], vector<bool> &visited ){ //step 1-->initial dfs
+        visited[node]=true;
+        
+        for(auto x:adj[node]){
+            if(!visited[x]){
+                dfs(x,adj,visited);
+            }
+        }
+        
+        if(!flag){
+            S.push(node);
+        }
+    }
+    
+    void transpose_graph(vector<int> adj[],vector<int> _adj[],int V){ //reverse the direction of edge
+        for(int i=0;i<V;i++){
+            for(auto x:adj[i]){
+                _adj[x].push_back(i);
+            }
+        }
+    }
+    
+    
+    
+    int no_of_SCC(vector<int> _adj[],vector<bool> &visited2){ //pop element from stack and do dfs
+        int res=0;
+        while(!S.empty()){
+            if(!visited2[S.top()]){
+                dfs(S.top(),_adj,visited2);
+                res++;
+            }
+            
+            S.pop();
+        }
+        
+        return res;
+    }
+    int kosaraju(int V, vector<int> adj[])
+    {
+        vector<bool> visited(V,false);
+        vector<int> _adj[V];
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                dfs(i,adj,visited); //step1
+                S.push(i);
+            }
+        }
+        
+        transpose_graph(adj,_adj,V); //step 2
+        vector<bool> visited2(V,false);
+        flag=1;
+        return no_of_SCC(_adj,visited2); //step3
+    }
+
+    int isCircle(int N, vector<string> A)
+    {
+        
+        bool flag=true;
+        vector<int> adj[26]; //26 alphabets
+
+        //iterate over A get each strings covert char to respective numbers and map them to end of string char
+        
+        unordered_map<char,int> real;
+        int real_size=0;
+        for(auto str:A){
+            int x=int(str[0]);
+            if(real[x]==0){
+                real_size++;real[x]++;
+            }
+            int y=int(str[str.size()-1]);
+            if(real[y]==0){
+                real_size++;real[y]++;
+            }
+            x-=97;
+            y-=97;
+            adj[x].push_back(y);
+        } //mapping done
+        
+    
+        
+        int Scc=kosaraju(26,adj);
+        //cout<<Scc<<endl;
+        //cout<<real_size<<endl;
+        if(Scc+real_size-1!=26){
+            return false;
+        }
+        
+        vector<int> indegree(26,0);
+        vector<int> outdegree(26,0);
+        
+        for(int i=0;i<26;i++){
+            for(auto x:adj[i]){
+                indegree[x]++;
+            }
+            outdegree[i]=adj[i].size();
+        }
+        
+        for(int i=0;i<26;i++){
+            if(indegree[i]==outdegree[i]){
+                continue;
+            }
+            else{
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }

@@ -1,0 +1,66 @@
+Shortest Source to Destination Path (Maze problem(modified Lee's))
+
+
+struct node{
+    int x;
+    int y;
+    int d; //distance
+};
+class Solution {
+  public:
+    queue<struct node *> Q;
+    
+    struct node *create(int x,int y,int d){
+        struct node *temp= new node();
+        temp->x=x;
+        temp->y=y;
+        temp->d=d;
+        return temp;
+    }
+    int shortestDistance(int n, int m, vector<vector<int>> grid, int x, int y) {
+        if(!grid[0][0]) 
+            return -1;
+        vector<vector<bool>> visited(n,(vector<bool>(m,false))); //initialized
+        int res=-1;
+        struct node *source=create(0,0,0);
+        Q.push(source);
+        //cout<<"hi";
+        while(!Q.empty()){
+            struct node *front=Q.front();
+            //cout<<front->x<<" "<<front->y<<" "<<front->d<<endl;
+            if((front->x)==x && (front->y)==y){ //we found target
+                res=front->d;
+                break;
+            }
+            if(front->x+1>=0 && front->x+1<n && grid[front->x+1][front->y] && !visited[front->x+1][front->y]){ 
+                //up
+                struct node *up=create(front->x+1,front->y,front->d+1);
+
+                visited[front->x+1][front->y]=true;
+                Q.push(up);
+            }
+            if(front->x-1>=0 && front->x-1<n && grid[front->x-1][front->y] && !visited[front->x-1][front->y]){ 
+                //down
+                struct node *down=create(front->x-1,front->y,front->d+1);
+                 visited[front->x-1][front->y]=true;
+                Q.push(down);
+            }
+            if(front->y-1>=0 && front->y-1<m && grid[front->x][front->y-1] && !visited[front->x][front->y-1]){ 
+                //left
+                struct node *left=create(front->x,front->y-1,front->d+1);
+                visited[front->x][front->y-1]=true;
+                Q.push(left);
+            }
+            if(front->y+1>=0 && front->y+1<m && grid[front->x][front->y+1] && !visited[front->x][front->y+1]){ 
+                //right
+                 struct node *right=create(front->x,front->y+1,front->d+1);
+                 visited[front->x][front->y+1]=true;
+                 Q.push(right);
+            }
+            
+            Q.pop();//pop parent
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,90 @@
+Given a square grid of size N, each cell of which contains integer cost which represents a cost to traverse through that cell, we need to find a path from top left cell to bottom right cell by which the total cost incurred is minimum.
+From the cell (i,j) we can go (i,j-1), (i, j+1), (i-1, j), (i+1, j). 
+
+Note: It is assumed that negative cost cycles do not exist in the input matrix.
+
+struct node{
+    int x;
+    int y;
+    int d; //distances and co-ordinates
+};
+class Solution
+{
+    public:
+    int n,m;
+    bool validate(int x,int y){
+        return (x>=0 && x<=n && y>=0 && y<=m);
+    }
+    
+    struct compare_dis{
+        bool operator()(struct node *a,struct node *b){ //make min heap
+            return a->d>b->d;
+        } 
+    };
+    
+    struct node* create(int x,int y,int dis){
+        struct node *temp=new node();
+        temp->x=x;
+        temp->y=y;
+        temp->d=dis;
+        return temp;
+    }
+    //Function to return the minimum cost to react at bottom
+	//right cell from top left cell.
+    int minimumCostPath(vector<vector<int>>& grid) 
+    {
+        //(n,m)-dest //(0,0)-source
+        n=grid.size()-1;
+        m=grid[0].size()-1;
+        vector<vector<int>> minimum(n+1,(vector<int>(m+1,INT_MAX))); //to get min path cost
+        priority_queue<struct node*,vector<struct node*>,compare_dis> Q; //min values in minimum will be provided
+        minimum[0][0]=grid[0][0];
+        
+        struct node *initial=create(0,0,minimum[0][0]);
+        Q.push(initial);
+        
+        int res=-1;
+        while(!Q.empty()){
+            struct node *front=Q.top();
+            int x=front->x;
+            int y=front->y;
+            int d=front->d;
+            
+            if(x==n && y==m){ //target reached
+                res=minimum[x][y];
+                break;
+            }
+            if(validate(x+1,y)){ //up
+                if(minimum[x][y]+grid[x+1][y]<minimum[x+1][y]){
+                    minimum[x+1][y]=minimum[x][y]+grid[x+1][y];
+                    struct node *temp=create(x+1,y,minimum[x+1][y]);
+                    Q.push(temp);
+                }
+            }
+            if(validate(x-1,y)){ //down
+                if(minimum[x][y]+grid[x-1][y]<minimum[x-1][y]){
+                    minimum[x-1][y]=minimum[x][y]+grid[x-1][y];
+                    struct node *temp=create(x-1,y,minimum[x-1][y]);
+                    Q.push(temp);
+                }
+            }
+            if(validate(x,y-1)){ //left
+                if(minimum[x][y]+grid[x][y-1]<minimum[x][y-1]){
+                    minimum[x][y-1]=minimum[x][y]+grid[x][y-1];
+                    struct node *temp=create(x,y-1,minimum[x][y-1]);
+                    Q.push(temp);
+                }
+            }
+            if(validate(x,y+1)){ //right
+                if(minimum[x][y]+grid[x][y+1]<minimum[x][y+1]){
+                    minimum[x][y+1]=minimum[x][y]+grid[x][y+1];
+                    struct node *temp=create(x,y+1,minimum[x][y+1]);
+                    Q.push(temp);
+                }
+            }
+            
+            Q.pop();
+        }
+        
+        return res;
+    }

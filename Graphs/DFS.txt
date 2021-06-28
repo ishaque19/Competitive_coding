@@ -1,0 +1,25 @@
+Given a connected undirected graph. Perform a Depth First Traversal of the graph.
+Note: Use recursive approach to find the DFS traversal of the graph starting from the 0th vertex from left to right according to the graph..
+
+
+vector<int> res;
+	
+    void helper(int V, vector<int> &visited,vector<int> adj[]){
+        if(visited[V]==0){
+            res.push_back(V);
+            visited[V]=1;
+        }
+        
+        for(auto l:adj[V]){
+            if(visited[l]!=1)
+                helper(l,visited,adj);
+        }
+    }
+    
+	vector<int>dfsOfGraph(int V, vector<int> adj[])
+	{
+	    
+		vector<int> visited(V,0);
+		helper(0,visited,adj);
+	    return res;
+	}

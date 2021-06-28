@@ -1,0 +1,48 @@
+Given a 5x6 snakes and ladders board, find the minimum number of dice throws required to reach the destination or last cell (30th cell) from the source (1st cell).
+
+You are given an integer N denoting the total number of snakes and ladders and an array arr[] of 2*N size where 2*i and (2*i + 1)th values 
+denote the starting and ending point respectively of ith snake or ladder. The board looks like the following.
+
+int minThrow(int N, int arr[]){
+     unordered_map<int,int> maps; //30 vertices
+     queue<pair<int,int>> Q; //first: vertex no(0-30) second:dice throw done
+    
+       vector<bool> visited(31,false); //1 to 30
+       for(int i=0;i<2*N;i+=2){
+           maps[arr[i]]=arr[i+1];
+       } //mapping done
+       //if key<value-->ladder else its snake
+       
+       Q.push(make_pair(1,0)); //src pushed
+       visited[1]=true;
+       int res=INT_MAX;
+       while(!Q.empty()){
+           pair<int,int> front=Q.front();
+           if(front.first==30){
+               res=front.second;
+               break;
+           }
+           for(int i=1;i<=6;i++){
+               if(front.first+i<=30 && !visited[front.first+i]){
+                   if(maps[front.first+i]!=0 && front.first+i<maps[front.first+i]){ //ladder
+                        Q.push(make_pair(maps[front.first+i],front.second+1));
+                        visited[front.first+i]=true;
+                        visited[maps[front.first+i]]=true; 
+                   }
+                   else if(maps[front.first+i]!=0 && front.first+i>maps[front.first+i]){ //snakes
+                       //ignore dont push
+                       visited[front.first+i]=true;
+                       visited[maps[front.first+i]]=true;
+                   }
+                   else{ //no snakes or ladders
+                       Q.push(make_pair(front.first+i,front.second+1));
+                       visited[front.first+i]=true;
+                   }
+               }
+           }
+           
+           Q.pop(); //popped out
+       }
+       
+       return res;
+    }

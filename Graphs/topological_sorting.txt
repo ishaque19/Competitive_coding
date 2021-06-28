@@ -1,0 +1,104 @@
+Given a Directed Graph with V vertices and E edges, Find any Topological Sorting of that Graph.
+
+Important: Topological sorting is only possible for DAG( graph with no cycles)
+
+************************************KAHN'S ALGO************************************************
+
+//Function to return list containing vertices in Topological order.
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<pair<int,int>> degree;
+	    vector<int> res;
+	    int count=0;
+	    for(int i=0;i<V;i++){ //initialization
+	        degree.push_back(make_pair(i,0));
+	    }
+	    
+	    //cout<<degree[5].second<<endl;
+	    for(int i=0;i<V;i++){
+	        for(auto neighbor:adj[i]){
+	            degree[neighbor].second++;
+	        }
+	    } //founded indegree successfully.
+	    
+	    queue<pair<int,int>> Q;
+	    for(auto it : degree){ 
+	        if(it.second==0){
+	            Q.push(it);
+	        }
+	    } //pushed indegree of 0 elements successfully.
+	    
+	    while(!Q.empty()){
+	        pair<int,int> prior=Q.front();
+	        for(auto it:adj[prior.first]){
+	            degree[it].second--;
+	            if(degree[it].second==0)
+	                Q.push(make_pair(it,0));
+	        }
+	        res.push_back(prior.first);
+	        Q.pop();
+	        count++;
+	    }
+	    
+	    if(count==V){
+	        return res;
+	    }
+	    else{ //topological order not possible
+	        vector<int> empty; return empty;
+	    }
+	   
+	}
+	_____________________________________*******USING DFS************_____________________________________(Simply added something to get result order of topological sort)
+	public:
+	//Function to return list containing vertices in Topological order. 
+	int res_it; //additional	
+	bool helper(int node,vector<int> adj[], vector<int> &visited, vector<int> &res){
+        visited[node]=0; //pushed into stack
+        
+        for(auto neighbor:adj[node]){
+            if(visited[neighbor]==0) //in any case we see 0,possibility of cycle
+                return true;
+
+            else if(visited[neighbor]==-1){
+                if(helper(neighbor,adj,visited,res))
+                    return true;
+                visited[neighbor]=1;    //at backtrack, we pop rite. // we are only popping as the neighbor!
+                res[res_it--]=neighbor; //additional
+                
+            }
+            
+            else{ //visited[neighbor]==1
+                continue;
+            }
+        }
+        return false;
+    }
+    
+	//Function to detect cycle in a directed graph.
+	bool isCyclic(int V, vector<int> adj[] , vector<int> &res) 
+	{
+	   	vector<int> visited(V,-1);
+	   	
+	   	for(int i=0;i<V;i++){ // should not do && visited[i]==-1 since if one thing false, entire loop breaks
+	   	       if(visited[i]==-1){ //all unvisited nodes
+	   	            if(helper(i,adj,visited,res))
+	   	                return true;
+	   	        visited[i]=1;   //popped out of stack
+	   	        res[res_it--]=i; //additional
+	   	       }
+	   	       //ignore for all nodes with 0 and 1. (0 not possible, since we popped out all.)
+	   	}
+	   	
+	   	return false;
+	}
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> empty;
+	    vector<int> res(V,0);
+	    res_it=V-1;
+	    if(isCyclic(V,adj,res))
+	        return empty;
+	    else
+	        return res;
+	}
+	

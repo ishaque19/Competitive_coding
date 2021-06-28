@@ -1,0 +1,99 @@
+Given a grid of size n*n filled with 0, 1, 2, 3. Check whether there is a path possible from the source to destination. You can traverse up, down, right and left.
+The description of cells is as follows:
+
+A value of cell 1 means Source.
+A value of cell 2 means Destination.
+A value of cell 3 means Blank cell.
+A value of cell 0 means Wall.
+Note: There are only a single source and a single destination.
+
+struct node{ //grid co-ordinates
+    int x;
+    int y;
+};
+
+///************************SAME AS MAZE PROBLEM BUT WITHOUT DISTANCE*********************************///
+
+class Solution
+{
+    public:
+    queue<struct node *> Q;
+    
+    struct node *create(int x,int y){
+        struct node *temp= new node();
+        temp->x=x;
+        temp->y=y;
+        return temp;
+    }
+    
+    //Function to find whether a path exists from the source to destination.
+    bool is_Possible(vector<vector<int>>& grid) 
+    {
+        int srcx,srcy,desx,desy;
+        int flag=0;
+        int n=grid.size();
+        int m=n;
+        vector<vector<bool>> visited(n,(vector<bool>(m,false))); //initialized
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[i].size();j++){
+                if(flag==2){
+                    break;
+                }
+                
+                if(grid[i][j]==1){
+                    srcx=i;
+                    srcy=j;
+                    flag++;
+                }
+                else if(grid[i][j]==2){
+                    desx=i;desy=j;flag++;
+                }
+                else{ // 0 or 3
+                    continue;
+                }
+            }
+            if(flag==2){
+                    break;
+            }
+        }
+        bool res=false;
+        struct node *source=create(srcx,srcy);
+        Q.push(source);
+      
+        while(!Q.empty()){
+            struct node *front=Q.front();
+            //cout<<front->x<<" "<<front->y<<" "<<front->d<<endl;
+            if((front->x)==desx && (front->y)==desy){ //we found target
+                res=true;
+                break;
+            }
+            if(front->x+1>=0 && front->x+1<n && grid[front->x+1][front->y] && !visited[front->x+1][front->y]){ 
+                //up
+                struct node *up=create(front->x+1,front->y);
+                visited[front->x+1][front->y]=true;
+                Q.push(up);
+            }
+            if(front->x-1>=0 && front->x-1<n && grid[front->x-1][front->y] && !visited[front->x-1][front->y]){ 
+                //down
+                struct node *down=create(front->x-1,front->y);
+                 visited[front->x-1][front->y]=true;
+                Q.push(down);
+            }
+            if(front->y-1>=0 && front->y-1<m && grid[front->x][front->y-1] && !visited[front->x][front->y-1]){ 
+                //left
+                struct node *left=create(front->x,front->y-1);
+                visited[front->x][front->y-1]=true;
+                Q.push(left);
+            }
+            if(front->y+1>=0 && front->y+1<m && grid[front->x][front->y+1] && !visited[front->x][front->y+1]){ 
+                //right
+                 struct node *right=create(front->x,front->y+1);
+                 visited[front->x][front->y+1]=true;
+                 Q.push(right);
+            }
+            
+            Q.pop();//pop parent
+        }
+        
+        return res;
+    }

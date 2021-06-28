@@ -1,0 +1,80 @@
+Given an undirected graph with V vertices and E edges, check whether it contains any cycle or not. //many unconnected parts is present
+
+-----------------------------------------------//UNIFORMITY BETWEEN DIRECTED AND UNDIRECTED THROUGH DFS//_____________________________________________
+	bool helper(int v,vector<int> &visited, vector<int> adj[],int parent){ 
+        
+        visited[v]=0; //pushed in stack
+        
+        for(auto l:adj[v]){
+            if(visited[l]==0 && l!=parent){ //l!=parent is right not l!=v check in point of adajacency list
+                return true;
+            }
+            else if(visited[l]==-1){
+                if(helper(l,visited,adj,v)) //not return helper() make if and then return 
+                    return true;
+                //visited[l]=1; //popped out from stack    //uniformity //not necessary can add if needed
+            }
+            else{ //visited[l]==1
+                continue;
+            }
+        } 
+        
+        return false;
+    }
+    
+	bool isCycle(int V, vector<int>adj[])
+	{
+	    vector<int> visited(V,-1);
+	    for(int i=0;i<V;i++){ //since many dfs graphs
+	        if(visited[i]==-1){
+	            if(helper(i,visited,adj,-1))
+	                return true;
+	            //visited[i]=1;     //uniformity. //not necessary can add if needed
+	        }
+	    }
+	    
+	    return false;
+	}
+	____________________________________________________________________________________________________________________________________
+bool isCycle(int V, vector<int>adj[])
+	{
+	    queue<int> Q;
+	    vector<int> visited(V,-1); //flags -1:unvisited 0:inside queue 1:visited and processed out of queue
+	    Q.push(0);
+	    visited[0]=0;
+	    
+	    while(true){
+	        if(Q.empty()){
+	            for(int i=0;i<visited.size();i++){
+                    if(visited[i]==-1){
+                        Q.push(i);
+                        break;
+                    }
+                }
+	        }
+	        if(Q.empty()){
+	            break;
+	        }
+	        int parent=Q.front();
+	        for(auto child: adj[parent]){
+	            if(visited[child]==0){
+	                return true;
+	            }
+	            else if(visited[child]==-1){
+	                Q.push(child);
+	                visited[child]=0;
+	            }
+	            else{ //1 case
+	                continue;
+	            }
+	        }
+	       Q.pop();
+	       visited[parent]=1;
+	    }
+	    
+	    return false;
+
+	}
+	
+	
+	

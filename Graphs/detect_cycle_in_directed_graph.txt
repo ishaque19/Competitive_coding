@@ -1,0 +1,39 @@
+public: //-1:unvisted 0:currently, in stack  1:popped out
+    bool helper(int node,vector<int> adj[], vector<int> &visited){
+        visited[node]=0; //pushed into stack
+        
+        for(auto neighbor:adj[node]){
+            if(visited[neighbor]==0) //in any case we see 0,possibility of cycle
+                return true;
+
+            else if(visited[neighbor]==-1){
+                if(helper(neighbor,adj,visited))
+                    return true;
+                visited[neighbor]=1;    //at backtrack, we pop rite. // we are only popping as the neighbor!
+            }
+            
+            else{ //visited[neighbor]==1
+                continue;
+            }
+        }
+        return false;
+    }
+    
+	//Function to detect cycle in a directed graph.
+	bool isCyclic(int V, vector<int> adj[]) 
+	{
+	   	vector<int> visited(V,-1);
+	   	for(int i=0;i<V;i++){ // should not do && visited[i]==-1 since if one thing false, entire loop breaks
+	   	       if(visited[i]==-1){ //all unvisited nodes
+	   	            if(helper(i,adj,visited))
+	   	                return true;
+	   	        visited[i]=1;   //popped out of stack 
+	   	       }
+	   	       //ignore for all nodes with 0 and 1. (0 not possible, since we popped out all.)
+	   	}
+	   	
+	   	return false;
+	}
+
+---------------------------------------------------------------------------
+also check the part that can we do with BFS by kahn's algo for topological sorting...there we can find if cycle exists for DAG
