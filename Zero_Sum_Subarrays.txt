@@ -1,0 +1,20 @@
+You are given an array arr[] of size n. Find the total count of sub-arrays having their sum equal to 0.
+
+unordered_map<ll,vector<ll>> track;
+    //Function to count subarrays with sum equal to 0.
+    ll findSubarray(vector<ll> arr, int n ) {
+        ll sum=0;
+        ll res=0;
+        for(int i=0;i<n;i++){
+            sum+=arr[i];
+            if(sum==0){ //from index 0 to curr index i
+                res+=1;
+            }
+            if(track.find(sum)!=track.end()){ //already exists
+                    res+=track[sum].size(); //arr[i+1] to arr[curr]
+            }
+            track[sum].push_back(i);
+        }
+        
+        return res;
+    }

@@ -1,0 +1,40 @@
+Given two strings A and B. Find the characters that are not common in the two strings. 
+ou dont need to read input or print anything. Complete the function UncommonChars()
+ which takes strings A and B as input parameters and returns a string that contains all the uncommon characters in sorted order. If no such character exists return "-1".
+
+
+
+string UncommonChars(string A, string B)
+        {
+            unordered_map<char,bool> trackA;
+            map<char,bool> trackB;
+            string res="";
+            for(auto x:A){
+                trackA[x]=false;
+            }
+            for(auto x:B){
+                if(trackA.find(x)!=trackA.end()){ //present
+                    trackA[x]=true;
+                }
+                else{ //not present
+                    trackB[x]=false;
+                }
+            }
+            
+            for(auto &it:trackA){
+                if(!it.second){
+                    trackB[it.first]=false;
+                }
+            }
+            
+            for(auto &it:trackB){
+                if(!it.second){
+                    res+=it.first;
+                }
+            }
+            if(res.size()==0){
+                res+='-';res+='1';
+            }
+            
+            return res;
+        }

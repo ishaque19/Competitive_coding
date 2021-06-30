@@ -1,0 +1,32 @@
+Given two unsorted arrays A of size N and B of size M of distinct elements, the task is to find all pairs from both arrays whose sum is equal to X.
+
+
+You don't need to read input or print anything. Your task is to complete the function allPairs() 
+which takes the array A[], B[], its size N and M respectively and an integer X as inputs and returns the sorted vector pair 
+values of all the pairs u,v where u belongs to array A and v belongs to array B. If no such pair exist return empty vector pair.
+
+
+
+
+
+vector<pair<int,int>> res;
+    vector<pair<int,int>> allPairs(int A[], int B[], int N, int M, int X)
+    {
+          
+          
+          map<int,bool> trackA;
+          unordered_map<int,bool> trackB;
+          for(int i=0;i<N;i++){ //hashing A
+              trackA[A[i]]=true;
+          }
+          for(int i=0;i<M;i++){ //hashing B
+              trackB[B[i]]=true;
+          }
+          
+          for(auto &it:trackA){
+            if(trackB[X-it.first])
+                res.push_back({it.first,X-it.first});
+          }
+          
+          return res;
+    }

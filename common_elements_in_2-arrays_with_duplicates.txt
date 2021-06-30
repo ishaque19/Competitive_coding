@@ -1,0 +1,26 @@
+Given two lists V1 and V2 of sizes n and m respectively. 
+Return the list of elements common to both the lists and return the list in sorted order.
+ Duplicates may be there in the output list.
+  
+  vector<int> common_element(vector<int>v1,vector<int>v2)
+    {
+        if(v2.size()>v1.size()){
+            return common_element(v2,v1);
+        }
+        vector<int> res;
+        unordered_map<int,int> freq;
+        for(auto x:v1){ //v1 is large size
+            freq[x]++;
+        }
+        
+        sort(v2.begin(),v2.end());
+        
+        for(auto x:v2){
+            if(freq[x]>0){
+                res.push_back(x);
+                freq[x]--;
+            }
+        }
+     
+        return res;   
+    }

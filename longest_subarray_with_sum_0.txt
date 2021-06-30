@@ -1,0 +1,28 @@
+Largest subarray with 0 sum
+
+Given an array having both positive and negative integers. The task is to compute the length of the largest subarray with sum 0.
+
+int maxLen(int A[], int n)
+{
+    int res=INT_MIN;
+    unordered_map<int,int> track;
+    int sum=0;
+    for(int i=0;i<n;i++){
+        sum+=A[i];
+        
+        if(sum==0) //if any case sum becomes 0, consider from start to i.
+            res=i+1;
+        if(track.find(sum)!=track.end()){ //avg:O(1) //already exists
+            int len=(i-(track[sum]+1))+1; //arr[j]-arr[i+1]
+            //since track[sum]+1 is for arr[i+1]
+            //+1 for length calculation to include the extreme end too.
+            res=max(res,len); 
+            //important if 2 or more same sum comes too,always have first occurence in order for max len
+        }
+        else{ //new
+            track[sum]=i;
+        }
+    }
+    
+    return res==INT_MIN?0:res;
+}

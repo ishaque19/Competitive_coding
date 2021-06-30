@@ -1,0 +1,31 @@
+Given a string str and another string patt. 
+Find the character in patt that is present at the minimum index in str.
+ If no character of patt is present in str then print ‘No character present’.
+
+
+Your Task:
+You only need to complete the function minIndexChar() that returns the index of answer in str or returns -1 in case no character of patt is present in str.
+
+int minIndexChar(string str, string patt)
+    {
+        //make a unordered map for string str whose key is char and value is index at str
+        unordered_map<char,int> trace;
+        int res=INT_MAX;
+        for(int i=0;i<str.size();i++){
+            if(trace[str[i]]==0){ //first occurence
+                if(i!=0) //since first char index is 0 then map value will be zero,causes conflict
+                    trace[str[i]]=i;
+                else
+                    trace[str[0]]=-1;
+            }
+        }
+        
+        for(auto x:patt){
+            if(trace[x]!=0){ //present in str
+                res=min(res,trace[x]);
+            }
+        }
+        //cout<<res;
+
+        return res==INT_MAX?-1:((res==-1)?0:res);
+    }

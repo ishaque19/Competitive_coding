@@ -1,0 +1,28 @@
+Given an array of integers arr of even length n and an integer k.
+
+We want to divide the array into exactly n / 2 pairs such that the sum of each pair is divisible by k.
+
+Return True If you can find a way to do that or False otherwise.
+
+bool canArrange(vector<int>& arr, int k) {
+        unordered_map<int,int> rem_map; //store freq of all rem //key:remainders //value:frequency
+        for(auto x:arr){
+            rem_map[(((x%k)+k)%k)]++; //to handle -ve rem (a change in rem will be produced)  && +ve rem remains unchanged
+        }
+        
+        for(auto &it:rem_map){
+            if(it.first==0 && it.second%2==0){ //even freq
+                continue;
+            }
+            else if(rem_map[it.first]==rem_map[k-it.first]){ //both frequencies are same 
+                //case: if one remainder:7(27) and other rem:3{23} then k=10 27+23=50 whose rem is 0
+                continue;
+            }
+            else{
+                return false;
+            }
+        
+        }
+        
+        return true;
+    }

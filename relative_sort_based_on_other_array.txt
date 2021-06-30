@@ -1,0 +1,43 @@
+Given two arrays arr1 and arr2, the elements of arr2 are distinct, and all elements in arr2 are also in arr1.
+
+Sort the elements of arr1 such that the relative ordering of items in arr1 are the same as in arr2.  Elements that don't appear in arr2 should be placed at the end of arr1 in ascending order.
+
+vector<int> relativeSortArray(vector<int>& A1, vector<int>& A2) {
+        map<int,pair<int,bool>> track; //pair.first=freq pair.second=visited
+        for(auto x:A1){
+            if(track.find(x)!=track.end()){ //already present
+                pair<int,bool> &temp=track[x];
+                //cout<<track[x].first<<" ";
+                temp.first++;
+                //cout<<track[x].first<<endl;
+            }
+            else{ //new
+                track[x]=make_pair(1,false);
+            }
+        }
+        /*(for(auto it:track){
+            cout<<it.first<<" "<<it.second.first<<" "<<it.second.second<<endl;
+        }*/
+        A1.clear(); //arr1 cleared
+        for(auto y:A2){
+            if(track.find(y)!=track.end()){ //present in arr1
+                pair<int,bool> &temp=track[y];
+                while(temp.first--){
+                    A1.push_back(y);
+                }
+                temp.second=true; //visited
+            }
+            else{ //not present
+                continue;
+            }
+        }
+        
+        for(auto &it:track){
+            if(!it.second.second){
+                while(it.second.first--)
+                    A1.push_back(it.first);
+                it.second.second=true; 
+            }
+        }
+        return A1;
+    }

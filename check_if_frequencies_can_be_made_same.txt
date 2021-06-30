@@ -1,0 +1,101 @@
+Check if frequencies can be equal
+
+//Algo:
+    //1.get the freq of each char in m1
+    //2.get how many types of freq in m2
+        //2.1 if size of m2 is 1--> return true
+        //2.2 if size of m2 is >2-->return false
+        //2.3 if size of m2==2
+			//if any m2 element has both 1 and 1  return true
+            //diff b/w two frequencies must be 1 and higher freq count should be 1-->return true
+            //else false
+
+			bool sameFreq(string s)
+	{
+	      unordered_map<char,int> m1;
+          unordered_map<int,int> m2;
+	    for(auto x:s){
+	        m1[x]++;
+	    } 
+	    
+	    for(auto &it:m1){
+	        m2[it.second]++;
+	    }
+	    
+	    if(m2.size()==1)
+	        return true;
+	        
+	    else if(m2.size()==2){
+	        auto it=m2.begin();
+	        pair<int,int> a=make_pair(it->first,it->second);
+	        it++;
+	        pair<int,int> b=make_pair(it->first,it->second);
+	        if(a.first==1 && a.second==1 || b.second==1 && b.first==1)
+	            return true;
+	        if(abs(a.first-b.first)==1){
+	            if(a.first>b.first){
+	                 if(a.second==1)
+	                    return true;
+	            }
+	            else{
+	                if(b.second==1)
+	                    return true;
+	            }
+	            return false;
+	        }
+	        
+	        else
+	            return false;
+	    }  
+	    
+	    else
+	        return false;
+	}
+	
+
+
+______________________________________________________________Geeks for geeks inefficient method________________________________________
+unordered_map<char,int> freq;
+    
+    bool isallsame(){
+        int frequency=-1;
+        for(auto &it:freq){
+            if(it.second>0){
+                if(frequency==-1){ //first non zero char
+                    frequency=it.second;
+                }
+                else{ //freq of a char is got, check whether all chars freq is same to freq
+                    if(it.second!=frequency)
+                        return false;
+                }
+            }
+            else
+                continue;
+        }
+        
+        return true;
+    }
+    
+	bool sameFreq(string s)
+	{
+	    bool res=true;
+	    for(auto x:s){
+	        freq[x]++;
+	    }
+	    if(isallsame()) //initially all freq are equal no need to reduce
+	        return true;
+	        
+	    //loop on each char and reduce 1 and check whether becomes same
+	    for(auto &it:freq){
+			if(it.second>0){
+	            it.second--; //reduce 1
+	            if(isallsame()){
+	                return true;
+	            }
+	            it.second++; //restore 
+	        }
+	    }
+	   
+	    return false;
+	    
+	}

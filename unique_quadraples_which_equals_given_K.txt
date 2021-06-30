@@ -1,0 +1,51 @@
+Find All Four Sum Numbers
+
+Given an array of integers and another number. 
+Find all the unique quadruple from the given array that sums up to the given number.
+You don't need to read input or print anything. Your task is to complete the function fourSum() 
+\which takes the array arr[] and the integer k as its input and returns an array containing 
+all the quadruples in a lexicographical manner. Also note that all the quadruples should be internally sorted, 
+ie for any quadruple [q1, q2, q3, q4] the following should follow: q1 <= q2 <= q3 <= q4.  
+(In the output each quadruple is separate by $. The printing is done by the driver's code)
+
+
+
+vector<vector<int> > fourSum(vector<int> &arr, int k) {
+        unordered_map<int,vector<node>> sums;
+        vector<vector<int> > res;
+        
+        for(int i=0;i<arr.size();i++){
+            for(int j=i+1;j<arr.size();j++){
+                int key=arr[i]+arr[j];
+                node temp;
+                temp.n1=i;
+                temp.n2=j;
+                temp.vis=false;
+                sums[key].push_back(temp);
+            }
+        }
+        
+        for(auto &it:sums){    
+           if(!it.second[0].vis && sums.find(k-it.first)!=sums.end()){ //present and not visited
+                auto it2=sums.find(k-it.first);
+                for(auto &x:it.second){
+                    for(auto &y:it2->second){
+                        if(x.n1!=y.n1 && x.n1!=y.n2 && x.n2!=y.n1 && x.n2!=y.n2){
+                            vector<int> temp;
+                            temp.push_back(arr[x.n1]);
+                            temp.push_back(arr[x.n2]);
+                            temp.push_back(arr[y.n1]);
+                            temp.push_back(arr[y.n2]);
+                            sort(temp.begin(),temp.end());
+                            res.push_back(temp);
+                        }
+                    }
+                }
+                it.second[0].vis=true;
+                it2->second[0].vis=true;
+           }    
+        }
+        
+        
+        return res;
+    }

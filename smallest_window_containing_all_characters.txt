@@ -1,0 +1,58 @@
+Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window.
+ If there is no such substring, return the empty string "".
+
+The testcases will be generated such that the answer is unique.
+
+A substring is a contiguous sequence of characters within the string.
+
+class Solution {
+public:
+    unordered_map<char,int> smap;
+    unordered_map<char,int> pmap; //smap and pmap initialized to 0
+    bool accepted(char i){
+        /*if(pmap[i]==0)
+            return true;*/-->//handled by below case itself
+        if(smap[i]-1>=pmap[i]){
+            smap[i]--;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    string minWindow(string s, string p) {
+        int count=0;
+        if(p.size()>s.size()){
+            return "";
+        }
+        
+        for(auto x:p){
+            pmap[x]++;
+        } //all freq of p are set
+        
+        int len=INT_MAX;
+        int start;
+        int i=0,j=0;
+        for( ;j<s.size();j++){ //two pointers
+            smap[s[j]]++;
+            if(smap[s[j]]<=pmap[s[j]]){
+                    count++;
+            }
+               
+            if(count==p.size()){ //all chars of p is found
+                  //try to reduce the window size and check still it maintains
+                  
+                  while(accepted(s[i])){ //we can reduce
+                      i++;
+                  }
+                  if(len>(j-i)+1){
+                      len=(j-i)+1;
+                      start=i;
+                  } //after reducing window
+            } 
+        }
+        if(len==INT_MAX)
+            return "";
+        return s.substr(start,len);
+    }
+};
