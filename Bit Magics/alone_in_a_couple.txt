@@ -1,0 +1,10 @@
+In a party of N people, each person is denoted by an integer. Couples are represented by the same number. Find out the only singe person in the party of couples.
+
+public:
+    int findSingle(int N, int arr[]){
+        int xors=arr[0];
+        for(int i=1;i<N;i++){
+            xors=xors^arr[i];
+        }
+        return xors;
+    }

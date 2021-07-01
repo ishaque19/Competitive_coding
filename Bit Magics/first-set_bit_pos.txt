@@ -1,0 +1,24 @@
+Given an integer an N. The task is to return the position of first set bit found from the right side in the binary representation of the number.
+Note: If there is no set bit in the integer N, then return 0 from the function.
+
+unsigned int getFirstSetBit(int n)
+    {
+        if(n==0)
+            return 0;
+        int flag=1;
+        while(n%2!=1){
+            n/=2;
+            flag++;
+        }
+        return flag;
+    }
+	
+	-----------------------------------------------
+	int a=(n&(~(n-1)));
+        int pos=log(a)/log(2);
+        return n==0?0:pos+1;
+		---------------------------------------------
+		return n==0?0:ffs(n);
+		-------------------------------------------------
+		
+		

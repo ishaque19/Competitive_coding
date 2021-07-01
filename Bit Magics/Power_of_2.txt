@@ -1,0 +1,14 @@
+bool isPowerofTwo(long long n){
+        if(n==0) return false;
+        return (n&(n-1))?false:true;
+    }
+	-----------------------------------
+	 return (n==0)?false:(ceil(log2(n))==floor(log2(n))?true:false);
+	 -----------------------------------
+	 bool isPowerofTwo(long long n){
+        if(n==0) return false;
+        n&=(n-1); //unset the rightmost set bit..since power of 2 has only one set bit
+        return n==0?true:false;
+    }
+	-----------------------------------------
+	

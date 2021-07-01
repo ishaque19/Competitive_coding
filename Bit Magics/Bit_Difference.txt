@@ -1,0 +1,20 @@
+int setbits_count(int n){
+        if(n==0){
+            return 0;
+        }
+        int count=0;
+        while(n){
+            n&=(n-1);
+            count++;
+        }
+        
+        return count;
+    }
+    
+    // Function to find number of bits needed to be flipped to convert A to B
+    int countBitsFlip(int a, int b){
+        
+        int c=a^b;
+        return setbits_count(c);
+        
+    }

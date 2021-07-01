@@ -1,0 +1,7 @@
+
+
+g=(n<<d)|(n>>(16-d));
+k=(n>>d)|(n<<(16-d));
+vector<int> empty;
+empty.push_back(g);empty.push_back(k);
+return empty;

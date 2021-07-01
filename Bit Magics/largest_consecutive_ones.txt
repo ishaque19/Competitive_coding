@@ -1,0 +1,33 @@
+public:
+    int maxConsecutiveOnes(int n)
+    {
+        int res=0;
+        int track=0;
+        while(n){
+            if(n%2)
+                track++;
+            else
+                track=0;
+            res=max(res,track);
+            n>>=1; //*2
+        }
+        
+        
+        return res;
+    }
+	---------------------------------------------
+	idea:x&(x<<1) ..remove one 1 from all consecutive 1's track.
+	
+	public:
+    int maxConsecutiveOnes(int n)
+    {
+        int res=0;
+        int track=0;
+        while(n){
+            res++;
+            n&=(n<<1);
+        }
+        
+        
+        return res;
+    }

@@ -1,0 +1,9 @@
+int setKthBit(int N, int K)
+    {
+        int x=1;
+        x<<=K;
+        return N|x;
+    }
+    
+more simply:
+return N|(1<<K);

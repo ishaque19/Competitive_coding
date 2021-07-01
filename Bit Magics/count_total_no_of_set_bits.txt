@@ -1,0 +1,21 @@
+Count total set bits from 1 to N
+
+public:
+    // n: input to count the number of set bits
+    //Function to return sum of count of set bits in the integers from 1 to n
+    int total;
+    int power_of_2=2;
+    int total_grps,set_bits_grps,rem;
+    int countSetBits(int n)
+    {
+        n++;   // Ignore 0 as all the bits are unset. as having this 0 will not provide us definite pattern
+        total=n/2;
+        while(power_of_2<=n){
+                total_grps=(n/power_of_2); //total no of partitions made 
+                set_bits_grps=(total_grps/2); //total no of (grps/2) as 0 and 1 only
+                total+=(set_bits_grps*power_of_2); //total no of 1's confined in grp alone
+                total+=(total_grps&1)?(n%power_of_2):0; //rem 1's not confined in grp are added.
+                power_of_2<<=1;
+        }
+        return total;
+    }
