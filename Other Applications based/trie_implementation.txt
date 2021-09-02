@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct trienode{
+    unordered_map<char,trienode*> mp;
+    bool end;
+};
+struct trienode *create(){
+    struct trienode* temp=new trienode();
+    temp->end=false;
+    return temp;
+}
+bool insertion(trienode *root,string words){
+    for(auto it:words){
+        if(!root->mp[it]){ //not present
+            root->mp[it]=create();
+            root=root->mp[it];
+        }
+        else{
+            root=root->mp[it];
+        }
+    }
+    root->end=true;
+    return root->end;
+}
+bool deletion(trienode *root,string words){
+    for(auto x:words){
+        if(root->mp[x])
+            root=root->mp[x];
+        else
+            return false;
+    }
+    root->end=false;
+    return true;
+}   
+bool find(trienode *root,string words){
+    for(auto x:words){
+        if(root->mp[x])
+            root=root->mp[x];
+        else
+            return false;
+    }
+    return root->end;
+        
+}
+int main()
+{
+    string arr[]={"deer","dad","apple","banana","mango"};
+    trienode *root=create();
+    for(auto x:arr){
+        bool st=insertion(root,x);
+        if(st)
+            cout<<x<<"inserted successsfully"<<endl;
+        else
+            cout<<"error!"<<endl;
+    }
+    
+    cout<<"find:"<<find(root,"apple")<<endl;
+    cout<<"delete:"<<deletion(root,"apple")<<endl;
+    cout<<"find:"<<find(root,"apple")<<endl;
+    return 0;
+}

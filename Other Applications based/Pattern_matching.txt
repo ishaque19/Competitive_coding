@@ -1,0 +1,52 @@
+int pos;
+void generate_lps(string patt,vector<int> &lps,int n){
+    int i=1;
+    int j=0;
+    lps[0]=0;
+    
+    while(i<n){
+        if(patt[i]==patt[j]){
+            lps[i]=j+1;i++;j++;
+        }
+        else{
+            if(j!=0)
+                j=lps[j-1];
+            else
+                lps[i++]=0;
+        }    
+    }
+}
+void evaluate(string str, string patt, vector<int> &lps){
+    int str_it=0,patt_it=0;
+    while(str_it<str.size() && patt_it<patt.size()){
+        if(str[str_it]==patt[patt_it]){
+            str_it++;patt_it++;
+        }
+        else{//mismatch
+            if(patt_it!=0){
+                patt_it=lps[patt_it-1];
+            }
+            else{
+                str_it++;
+            }
+        }
+    }
+    
+    if(patt_it==patt.size())
+        pos=(str_it-patt.size());
+    
+    return;    
+}
+//Function to locate the occurrence of the string x in the string s.
+int strstr(string str, string patt)
+{
+     //generate pie table
+     pos=-1;
+     vector<int> lps(patt.size(),0);
+     generate_lps(patt,lps,patt.size());
+     
+     //use pie to check
+     evaluate(str,patt,lps);
+     return pos;
+     
+}
