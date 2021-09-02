@@ -1,0 +1,162 @@
+implementation of avl tree!
+
+node *insert(node *root,node *p){
+	if(!root){
+		return p;
+	}
+	
+	else if(p->val>=root->val){ //rhs
+		root->right=insert(root->right,p);
+	}
+	else{ //lhs
+		root->left=insert(root->left,p);
+	}
+	root=balance(root);
+	return root;
+}
+node *balance(node *root){
+	int balance_factor=calculate_balancefactor(root);
+	if(abs(balance_factor)<=1)
+		return root;
+	}
+	else{ //need to balance
+		if(balance_factor>1){ //left heavy 
+			if(calculate_balancefactor(root->left)>0){ //+ve +ve //ll imbalance-->do ll rotation
+				root=ll(root);
+			}
+			else{ //+ve -ve //lr imbalance- do lr rotation.
+				root=lr(root);
+			}
+		}
+		else{ //right heavy 
+			if(calculate_balancefactor(root->right)<0){ //rr imbalance->rr rotation 
+				root=rr(root);
+			}
+			else{ //rl imbalance.
+				root=rl(root);
+			}
+		}
+		
+		return root;
+	}
+}
+int height(node *root){
+	if(!root->left && !root->right)
+		return 0;
+		
+	int leftsubtree=height(root->left);
+	int rightsubtree=height(root->right);
+	
+	return max(leftsubtree,rightsubtree)+1;
+}	
+
+int calculate_balancefactor(node *root){
+	int leftsubtree=height(root->left);
+	int rightsubtree=height(root->right);
+	
+	return leftsubtree-rightsubtree;  //+ve-left heavy    -ve:right heavy
+}
+
+//ll imbalance- left side and left side heavy -->to clear ll imbalance do ll rotation.
+//done only on 3 nodes whatever the size.
+
+node* ll(node *root){  
+
+	node *x=root;
+	node *y=root->left;
+	
+	
+	x->left=y->right;
+	y->right=x;
+	
+	return y;
+}
+
+node *lr(node *root){
+
+	root->left=rr(root->left);
+	return ll(root);
+}
+
+node *rr(node *root){  
+	node *x=root;
+	node *y=root->right;
+	
+	x->right=y->left;
+	y->left=x;
+	
+	return y;
+}
+
+node *rl(node *root){
+	
+	root->right=ll(root->right);
+	return rr(root);
+	
+}
+
+node *deletenode(node *root,int data){
+	if(!root)
+		return root;
+	if(!root->left && !root->right){
+		delete root;
+		return NULL;
+	}
+	
+	if(root->data<data){
+		root->right=deletenode(root->right,data);
+	}
+	else if(root->data>data){
+		root->left=deletenode(root->left,data);
+	}
+	else{
+		if(root->left!=NULL){
+			node *q=predecessor(root->left);
+			root->data=q->data;
+			root->left=deletenode(root->left,q->data);
+		}
+		else{
+			node *q=successor(root->right);
+			root->data=q->data;
+			root->right=deletenode(root->right,q->data);
+		}
+	}
+	
+	if(calculate_balancefactor(root)==2){
+		if(calculate_balancefactor(root->left)==-1){
+			root=lr(root);
+		}
+		else if(calculate_balancefactor(root->left)==0)){
+			root=ll(root);
+		}
+		else{ //1
+			root=ll(root);
+		}
+	}
+	else{ //calculate_balancefactor(root)==-2
+		if(calculate_balancefactor(root->right)==-1){
+			root=rr(root);
+		}
+		else if(calculate_balancefactor(root->right)==0)){
+			root=rr(root);
+		}
+		else{ //1
+			root=rl(root);
+		}
+	}
+	
+	return root;
+}
+node *successor(node *root){
+	while(p->left!=NULL)
+		p=p->left;
+	
+	return p;
+}
+
+node *predecessor(node *root){
+	while(p->right!=NULL)
+		p=p->right;
+	
+	return p;
+}

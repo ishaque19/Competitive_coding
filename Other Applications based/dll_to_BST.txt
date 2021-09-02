@@ -1,0 +1,39 @@
+Sorted dll to BST(or)Self Balancing BST.
+
+Node* sortedListToBST(Node *head) //root to leaf construction.
+{
+     Node *mid=get_middle(head); //returns middle of dll
+    if(!mid->next && !mid->prev){ //only one element
+        return mid;
+    }
+  	if(!mid->prev){
+      return mid;
+    }
+    mid->prev->next=NULL;
+    mid->prev=sortedListToBST(head);
+  	if(!mid->next){
+      return mid;
+    }
+    mid->next->prev=NULL;
+    mid->next=sortedListToBST(mid->next);
+    return mid;
+}
+
+Efficient: //ordering of lines of code is important.
+
+Node *sortedListToBST(Node *head,int count){ //get the count of dll
+	if(n<=0)
+		return NULL;
+	
+	Node *left=sortedListToBST(head,count/2);
+	
+	Node *root=head;
+	head=head->next;
+	
+	Node *right=sortedListToBST(head,count-count/2-1);
+	
+	root->prev=left;
+	root->next=right;
+	
+	return root;
+}

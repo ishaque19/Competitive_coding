@@ -1,0 +1,38 @@
+Evaluation of Postfix Expression
+
+int evaluatePostfix(string S)
+    {
+       stack<int> st;
+       for(auto x:S){
+           if(x=='*'|| x=='/' || x=='+' || x=='-'){
+               int a,b;
+               if(!st.empty()){
+                    a=st.top();
+                    st.pop();
+               }
+               if(!st.empty()){
+                   b=st.top();
+                   st.pop();
+               }
+               switch(x){
+                   case '*':
+                    st.push(b*a);
+                    break;
+                   case '/':
+                    st.push(b/a); //important b/a
+                    break;
+                   case '+':
+                    st.push(b+a);
+                   break;
+                   case '-':
+                    st.push(b-a); //important b-a
+                    break;
+               }
+           }
+           else{
+               int y=(int)x-48;
+               st.push(y);
+           }
+       }
+       return st.top();
+    }

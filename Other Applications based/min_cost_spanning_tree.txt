@@ -1,0 +1,42 @@
+//Minimum cost spanning tree at concise code and prims algo.
+
+int spanningTree(int V, vector<vector<int>> adj[]){
+	int res=0;
+	vector<int> key(V,INT_MAX);
+	vector<int> visited(V,false);
+	
+	key[0]=0;
+	
+	
+	priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> q;
+	q.push({0,0}); //second-vertex first-weight-->then only we can do min heap with weigtht
+	
+	int count=0;
+	
+	while(count<V){
+		auto temp=q.top();
+		q.pop(); //important..should be placed here only.
+		
+		int weight=temp.first;
+		int vertex=temp.second;
+		
+		if(visited[vertex])
+			continue;
+			
+		
+		visited[vertex]=true;
+		res+=key[vertex]; //(or) res+=weight;
+		
+		for(auto it:adj[vertex]){
+			int neighbor=it[0];
+			int weight=it[1];
+			if(key[neighbor]>weight){
+				key[neighbor]=weight;
+				q.push({key[neighbor],neighbor});
+			}
+		}
+		count++;
+	}
+	
+	return res;
+}

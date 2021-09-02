@@ -1,0 +1,29 @@
+Given a binary tree, connect the nodes that are at same level. You'll be given an addition nextRight pointer for the same.
+
+Initially, all the nextRight pointers point to garbage values. Your function should set these pointers to point next right for each node.
+
+map<int,Node *> x;
+    void helper(Node *p,int level){
+        if(!p)
+            return;
+            
+        if(x[level]==NULL){
+            x[level]=p;
+            x[level]->nextRight=NULL;
+        }
+        else{ //(x[level]!=NULL)
+            Node *temp=x[level];
+            temp->nextRight=p;
+            x[level]=p;
+        }
+        
+        helper(p->left,level+1);
+        helper(p->right,level+1);
+    
+    }
+    void connect(Node *p)
+    {
+       helper(p,0);
+       return;
+    }
+    
